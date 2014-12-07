@@ -8,10 +8,10 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
    
    <?php /*----Load Bootstrap Framework-----*/  ?>
-   <link href="<?php //echo base_url();?>/codeigniter/assets/css/bootstrap.css" rel="stylesheet">
-   <link href="<?php //echo base_url();?>/codeigniter/assets/css/bootstrap-theme.min.css" rel="stylesheet">
-   <script src="<?php //echo base_url();?>/codeigniter/assets/js/jquery.min.js"></script>
-	<script src="<?php //echo base_url();?>/codeigniter/assets/js/bootstrap.min.js"></script>
+   <link href="<?php echo base_url();?>assets/css/bootstrap.css" rel="stylesheet">
+   <link href="<?php echo base_url();?>assets/css/bootstrap-theme.min.css" rel="stylesheet">
+   <script src="<?php echo base_url();?>assets/js/jquery.min.js"></script>
+	<script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
 	<?php /*----Load Bootstrap Framework-----*/  ?>
    
 	<style>
@@ -80,16 +80,31 @@
 
    
    <?php /*----NavBar-----*/   ?>
-      <?php $this->load->view('navbar');?>
+		<?php
+			if(empty($navBarData)){
+				$navBarData = array();
+			}
+		?>
+      <?php $this->load->view('navbar' , $navBarData);?>
    <?php /*----NavBar-----*/   ?>
    
    <div class="main-view">
    <?php /*----Main View-----*/   ?>
-      <?php $this->load->view($view);?>
+		<?php
+			if(empty($viewData)){
+				$viewData = array();
+			}
+		?>
+      <?php $this->load->view($view , $viewData);?>
    <?php /*----Main View-----*/   ?>
    </div>
    <?php /*----Footer-----*/   ?>
-      <?php $this->load->view('footer');?>
+		<?php
+			if(empty($footerData)){
+				$footerData = array();
+			}
+		?>
+      <?php $this->load->view('footer' , $footerData);?>
    <?php /*----Footer-----*/   ?>
    
 

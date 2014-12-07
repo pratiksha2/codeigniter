@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Logout extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -19,30 +19,10 @@ class Login extends CI_Controller {
 	 */
 	public function index()
 	{
-		if($this->users_lib->getUserId()){
-			redirect('profile');
-		}
-		$this->load->view('login');
+		$this->session->sess_destroy();
+		redirect(base_url());
 	}
 	
-	public function verify(){
-		if($this->users_lib->getUserId()){
-			redirect('profile');
-		}
-		$this->form_validation->set_rules('login', 'Email / Login ID', 'trim|required|min_length[4]');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
-		if($this->form_validation->run()){
-			$auth = $this->users_lib->auth( $this->input->post('login') , $this->input->post('password') );
-			if(	$auth['error'] ){
-				
-			}else{
-				redirect('profile');
-			}
-		}
-		$this->load->view('login',$auth);
-		
-		
-	}
 	
 }
 
