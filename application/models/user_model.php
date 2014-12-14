@@ -27,7 +27,7 @@ class User_model extends CI_Model {
   }
   return false;
  }
- public function add_user()
+ public function add_user($activationCode)
  {
   $data=array(
     'FirstName'=>$this->input->post('fname'),
@@ -36,15 +36,15 @@ class User_model extends CI_Model {
     'Password'=>md5($this->input->post('password')),
 	'Blocked'=>$this->input->post(0),
 	'Gender'=>$this->input->post('gender'),
-	'Activated'=>$this->input->post(0),
+	'Email_verification_code'=>$activationCode,
 	'UserType'=>$this->input->post(1),
+	'LoginID'=>$this->input->post('loginId')
   );
   $this->db->set('RegistrationDate', 'NOW()', FALSE);
   $this->db->insert('users',$data);
   $userid = $this->db->insert_id();
   $userProfile = array(
 	'UserID'=>$userid,
-	'LoginID'=>$this->input->post('loginId')
   );
    $dob = $this->input->post('dob');
   $this->db->set('DOB', $dob, FALSE);
@@ -117,5 +117,54 @@ public function add_partnerSeeking() {
   $this->db->insert('partner_seeking',$data);
 
 }
+function EmailModel(){
+  parent::Model();
+  $this->load->library('email');
+ }
+
+
+ function sendVerificatinEmail($email,$verificationText,$content){
+  
+  $config = Array(
+     'protocol' => 'smtp',
+     'smtp_host' => 'smtp.yourdomain.com.',
+     'smtp_port' => 465,
+     'smtp_user' => 'admin@yourdomain.com', // change it to yours
+     'smtp_pass' => '########', // change it to yours
+     'mailtype' => 'html',
+     'charset' => 'iso-8859-1',
+     'wordwrap' => TRUE
+  );
+  
+  
+  $this->load->library('email', $config);
+  $this->email->set_newline("\r\n");
+  $this->email->from('admin@yourdomain.com', "Admin Team");
+  $this->email->to($email);  
+  $this->email->subject("Email Verification");
+  $this->email->message($content);
+  $this->email->send();
+  
+ }
+  function verifyEmailAddress($verificationcode){  
+  $sql = "update users set Activated=1 WHERE Email_verification_code='".$verificationcode."'";
+  $this->db->query($sql, array($verificationcode));
+  return $this->db->affected_rows(); 
+ }
+ function resetPasswordCode($resetCode,$email){
+	$sql = "update users set Reset_code='".$resetCode."' WHERE Email='".$email."'";
+    $this->db->query($sql, array($resetCode));
+    $this->db->affected_rows(); 
+	$content = "Dear User,\nPlease click on below URL or paste into your browser to rest your Password\n http://localhost/codeigniter/user/reset/".$resetCode."\n"."\n\nThanks\nAdmin Team" ;
+	$this->sendVerificatinEmail($resetCode,$email,$content);
+ }
+ function addNewPassword(){
+	$newpasword = $this->input->post('newpasword');
+	$resetCode = $this->input->post('resetCode');
+	$sql = "update users set Reset_code='',Password = '".$newpasword."'  WHERE Reset_code='".$resetCode."'";
+    $this->db->query($sql, array($resetCode));
+   return $this->db->affected_rows(); 
+ 
+ }
 }
 ?>

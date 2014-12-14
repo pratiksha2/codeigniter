@@ -9,7 +9,7 @@
       </ol>
       <div class="carousel-inner" role="listbox">
         <div class="item">
-          <img src="/matrimony_git/pics/SamodePalacewedding-039(pp_w900_h600).jpg" alt="First slide">
+          <img src="<?php echo base_url();?>assets/pics/SamodePalacewedding-039(pp_w900_h600).jpg" alt="First slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>Matrimonialsindia.com.</h1>
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="item">
-          <img src="/matrimony_git/pics/wedding-photojournalism-01.jpg" alt="Second slide">
+          <img src="<?php echo base_url();?>assets/pics/wedding-photojournalism-01.jpg" alt="Second slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>Another example headline.</h1>
@@ -31,7 +31,7 @@ id nibh ultricies vehicula ut id elit.</p>
           </div>
         </div>
         <div class="item active">
-          <img src="/matrimony_git/pics/080814-458(pp_w900_h600).jpg" alt="Third slide">
+          <img src="<?php echo base_url();?>assets/pics/080814-458(pp_w900_h600).jpg" alt="Third slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>One more for good measure.</h1>
@@ -63,21 +63,21 @@ id nibh ultricies vehicula ut id elit.</p>
       <!-- Three columns of text below the carousel -->
       <div class="row">
         <div class="col-lg-4">
-          <img class="img-circle" src="/matrimony_git/pics/PageImage-530584-5190137-FotoWala_2011_SB17230.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <img class="img-circle" src="<?php echo base_url();?>assets/pics/PageImage-530584-5190137-FotoWala_2011_SB17230.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
           
           <p>Welcome to the profound world of MatrimonialsIndia.com one of the most frequently visited and highly preferred matrimonial site. Providing an ample database of profiles, we are immensely known for the perfect matchmakings, handy navigation and commendable services. With the help of our unmatched quality services, we have been able to establish ourselves among the foremost players in the field of Indian Matrimonials. So feel free to search for prospective bride or bridegroom on the basis of mother tongue, country, religion, caste, occupation etc. from the immense database of profiles
 		  </p>
           <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
-          <img class="img-circle" src="/matrimony_git/pics/PageImage-530584-5189749-Delhi_SB21288.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <img class="img-circle" src="<?php echo base_url();?>assets/pics/PageImage-530584-5189749-Delhi_SB21288.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
          
           <p>Search Options Exclusive search options. You can search by Mother Tounge, Location, Education, Occupation, Diet Style, Keyword, etc. You can also use smart photo search feature.
 Brides and Grooms Profile You can search from database of thousands of indian bride and grooms marriage profiles. Marriage Profiles of Gujarati, Punjabi, Bengali, Marathi, Brahmin, Jain and more...</p>
           <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
-          <img class="img-circle" src="/matrimony_git/pics/PageImage-530584-5190151-2012_SB25724.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <img class="img-circle" src="<?php echo base_url();?>assets/pics/PageImage-530584-5190151-2012_SB25724.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
           
           <p>Privacy Assured We respect your privacy. On FreeSathi.com you can
 Accept and Decline Profiles
@@ -101,7 +101,7 @@ commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,
 tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5">
-          <img data-holder-rendered="true" src="/matrimony_git/pics/Abhiraandmalay-IMG_2831(pp_w900_h600).jpg" class="featurette-image img-responsive"  alt="500x500">
+          <img data-holder-rendered="true" src="<?php echo base_url();?>assets/pics/Abhiraandmalay-IMG_2831(pp_w900_h600).jpg" class="featurette-image img-responsive"  alt="500x500">
         </div>
       </div>
 
@@ -109,7 +109,7 @@ tellus ac cursus commodo.</p>
 
       <div class="row featurette">
         <div class="col-md-5">
-          <img data-holder-rendered="true" src="/matrimony_git/pics/Goa-wedding-photographer_121218_SB2012-4.jpg" class="featurette-image img-responsive"  alt="500x500">
+          <img data-holder-rendered="true" src="<?php echo base_url();?>assets/pics/Goa-wedding-photographer_121218_SB2012-4.jpg" class="featurette-image img-responsive"  alt="500x500">
         </div>
         <div class="col-md-7">
           <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
@@ -131,7 +131,7 @@ commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus,
 tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5">
-          <img data-holder-rendered="true" src="/matrimony_git/pics/25(pp_w892_h661).jpg" class="featurette-image img-responsive"  alt="500x500">
+          <img data-holder-rendered="true" src="<?php echo base_url();?>assets/pics/25(pp_w892_h661).jpg" class="featurette-image img-responsive"  alt="500x500">
         </div>
       </div>
 
@@ -148,11 +148,6 @@ tellus ac cursus commodo.</p>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="Carousel%20Template%20for%20Bootstrap_files/jquery.js"></script>
-    <script src="Carousel%20Template%20for%20Bootstrap_files/bootstrap.js"></script>
-    <script src="Carousel%20Template%20for%20Bootstrap_files/docs.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="Carousel%20Template%20for%20Bootstrap_files/ie10-viewport-bug-workaround.js"></script>
   
 
 <div data-original-title="Copy to clipboard" title="" style="position: absolute; left: 0px; top: -9999px; width: 15px; height: 15px; z-index: 999999999;" class="global-zeroclipboard-container" id="global-zeroclipboard-html-bridge">      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" height="100%" width="100%">         <param name="movie" value="/assets/flash/ZeroClipboard.swf?noCache=1417087136565">         <param name="allowScriptAccess" value="sameDomain">         <param name="scale" value="exactfit">         <param name="loop" value="false">         <param name="menu" value="false">         <param name="quality" value="best">         <param name="bgcolor" value="#ffffff">         <param name="wmode" value="transparent">         <param name="flashvars" value="trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com">         <embed src="Carousel%20Template%20for%20Bootstrap_files/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" name="global-zeroclipboard-flash-bridge" allowscriptaccess="sameDomain" allowfullscreen="false" type="application/x-shockwave-flash" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com" scale="exactfit" height="100%" width="100%">                </object></div><svg style="visibility: hidden; position: absolute; top: -100%; left: -100%;" preserveAspectRatio="none" viewBox="0 0 500 500" height="500" width="500"><defs></defs><text style="font-weight:bold;font-size:23pt;font-family:Arial, Helvetica, Open Sans, sans-serif;dominant-baseline:middle" y="23" x="0">500x500</text></svg></body></html>

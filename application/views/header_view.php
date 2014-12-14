@@ -3,9 +3,9 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <title><?php echo (isset($title)) ? $title : "My CI Site" ?> </title>
-  <link rel="stylesheet" type="text/css" href="http://localhost/matri/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="http://localhost/matri/css/carousel.css" />
-  <script type="text/javascript" src="http://localhost/matri/js/ie-emulation-modes-warning.js"></script>
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/carousel.css" />
+  <script type="text/javascript" src="<?php echo base_url();?>assets/js/ie-emulation-modes-warning.js"></script>
 </head>
 <body>
  <div class="navbar-wrapper">

@@ -38,4 +38,13 @@ class Users_lib {
 		}
 		
 	}
+	public function is_unique($str, $field) {
+        $field_ar = explode('.', $field);
+        $query = $this->CI->db->get_where($field_ar[0], array($field_ar[1] => $str), 1, 0);
+        if ($query->num_rows() === 0) {
+            return TRUE;
+        }
+
+        return FALSE;
+    }
 }

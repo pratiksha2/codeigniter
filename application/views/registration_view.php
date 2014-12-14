@@ -1,9 +1,9 @@
-<link rel="stylesheet" type="text/css" href="http://localhost/matri/css/jquery-ui.css" />
-<link rel="stylesheet" type="text/css" href="http://localhost/matri/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="http://localhost/matri/css/bootstrap.min.css" />
-<script type="text/javascript" src="http://localhost/matri/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="http://localhost/matri/js/jquery-ui.js"></script>
-<script type="text/javascript" src="http://localhost/matri/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/css/bootstrap.min.css" />
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery-ui.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
 <script type="text/javascript">
             // When the document is ready
             jQuery(document).ready(function () {
@@ -16,7 +16,7 @@
         </script>
 <style>
 body {
-	background: url('/matrimony_git/pics/Destination-Wedding-Photographer-Udaipur-Oberi-Udaivillas-India-49(pp_w892_h594).jpg') no-repeat center center fixed;
+	background: url('<?php echo base_url();?>/assets/pics/Destination-Wedding-Photographer-Udaipur-Oberi-Udaivillas-India-49(pp_w892_h594).jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
