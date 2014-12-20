@@ -104,8 +104,7 @@
 					<div>Time of Bitrh : <?php echo matrimony_time(set_default($profile['PersonalInfo']->DOB));?></div>
 					<div>Height : <?php echo set_default($profile['PersonalInfo']->Height);?> (in centimeters)</div>
 					<div>Weight : <?php echo set_default($profile['PersonalInfo']->Weight);?> (in kilograms)</div>
-					<div>Culture : <?php echo set_default($profile['PersonalInfo']->Culture);?></div>
-					<div>Body Type - Caste : <?php echo set_default($profile['PersonalInfo']->BodyType);?></div>
+					<div>Body Type : <?php echo set_default($profile['PersonalInfo']->BodyType);?></div>
 					<div>Complexion : <?php echo set_default($profile['PersonalInfo']->Complexion);?></div>
 					<div>Eye Color : <?php echo set_default($profile['PersonalInfo']->EyeColor);?></div>
 					<div>Hair Color : <?php echo set_default($profile['PersonalInfo']->HairColor);?></div>

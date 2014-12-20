@@ -38,6 +38,16 @@ class Users_lib {
 		}
 		
 	}
+	
+	public function isAdmin(){
+		// get logged in user
+		$CI =& get_instance();
+		$UserID = $this->getUserId();
+		$UserID = 1;
+		$CI->load->model('admin_model');
+		$isAdmin = $CI->admin_model->isAdmin($UserID);
+		return $isAdmin;
+	}
 	public function is_unique($str, $field) {
         $field_ar = explode('.', $field);
         $query = $this->CI->db->get_where($field_ar[0], array($field_ar[1] => $str), 1, 0);
