@@ -4,7 +4,7 @@ class Admin_model extends CI_Model {
 
 	public function isAdmin($id = NULL){
 		if(empty($id)){
-			return FALSE;
+			$id = $this->users_lib->getUserId();
 		}
 		
 		$this->load->database();		
@@ -17,7 +17,7 @@ class Admin_model extends CI_Model {
 		return FALSE;
 	}
 		
-	public function getAllUsers($params=NULL){
+	public function getAllUsers($params=array()){
 		$default = array(
             'blocked' => NULL,
             'activated' => NULL,
@@ -64,11 +64,12 @@ class Admin_model extends CI_Model {
 		$returnData = array(
 								'users' => $users,
 								'totalPages' => $totalPages,
+								'currentPage' => $currentPage,
 							);
 		return $returnData;
 	}
 	
-	public function getAllAdmins($params=NULL){
+	public function getAllAdmins($params=array()){
 		$default = array(
             'blocked' => NULL,
             'activated' => NULL,
@@ -116,7 +117,45 @@ class Admin_model extends CI_Model {
 		$returnData = array(
 								'admins' => $admins,
 								'totalPages' => $totalPages,
+								'currentPage' => $currentPage,
 							);
 		return $returnData;
 	}
+	
+	public function isLastAdmin(){
+		$this->load->database();		
+		$sql = "SELECT count(1) as isLastAdmin FROM `admin`";
+		$query = $this->db->query($sql);
+		$isLastAdmin = $query->first_row()->isLastAdmin;
+		if($isLastAdmin<2){
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public function remove_admin($id = NULL){
+		$id = (int)$id;
+		if($id>0){
+			$this->load->database();		
+			$sql = "DELETE FROM `admin` WHERE UserID = " . $this->db->escape($id);
+			$query = $this->db->query($sql);
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public function make_admin($id = NULL , $adminId = NULL){
+		$id = (int)$id;
+		$adminId = (int)$adminId;
+		if( $id > 0 && $adminId > 0 ){
+			$this->load->database();		
+			$sql = "INSERT INTO `admin` (id, UserID, MadeAdminBy, AdminFrom) VALUES ( NULL , " . $this->db->escape($id) . " , " . $this->db->escape($adminId) . " , now())";
+			$query = $this->db->query($sql);
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	
+	
 }

@@ -6,8 +6,27 @@ class Search_model extends CI_Model {
 	
 		$search = array_filter($params);	// blank or empty element eliminated
 		
-		$this->load->database();
-		//array_walk($search,"$this->db->escape");
+		foreach($search as $key=>$tmp){
+			if( $tmp == 'Will Tell You Later' ){
+				unset($search[$key]);
+			}
+		}
+		
+		$default = array(
+            'gender' 	=> NULL,
+            'ageFrom' 	=> NULL,
+            'ageTo' 	=> NULL,
+            'MaritalStatus' 	=> NULL,
+            'Manglik' 	=> NULL,
+            'ReligionCaste' 	=> NULL,
+            'MotherTongue' 	=> NULL,
+            'LivingIn' 	=> NULL,
+            'Education' => NULL,
+        );
+        /* Merge with input options */
+        $search = array_merge($default, $search);
+		
+		
 		
 		return $search;
 		
@@ -18,7 +37,6 @@ class Search_model extends CI_Model {
 		$cleanedOutput = $this->getCleanedParams( $params );
 		
 		$sqls = $this->searchQueryBuilder( $params );
-		
 		$this->load->database();		
 		$sql = $sqls['sqlAll'];
 		$query = $this->db->query($sql);
@@ -84,13 +102,13 @@ class Search_model extends CI_Model {
             $cols[] = 'per.DOB';
             $andArr[] = '( per.DOB BETWEEN '.$this->db->escape($searchParams['ageTo']).' AND  '.$this->db->escape($searchParams['ageFrom']).' )';
         }
-        if(isset($searchParams['MaritalStatus'])){
+        /*if(isset($searchParams['MaritalStatus'])){
 			$searchParams['MaritalStatus'] = $this->getEscapedArray($searchParams['MaritalStatus']);
 			$MaritalStatus = implode(",",$searchParams['MaritalStatus']);
             $tbls['per'] = 'personal_info per';
             $cols[] = 'per.MaritalStatus';
             $andArr[] = "( per.MaritalStatus IN (".$MaritalStatus.") )";
-        }
+        }*/
         if(isset($searchParams['Manglik'])){
 			$searchParams['Manglik'] = $this->getEscapedArray($searchParams['Manglik']);
 			$Manglik= implode(",",$searchParams['Manglik']);
@@ -163,8 +181,14 @@ class Search_model extends CI_Model {
 		return $dt;
 	}
 	function getEscapedArray($arr=array()) {
-		foreach ($arr as $key=>$val){
-			$arr[$key] = $this->db->escape($val);
+		if(!is_array($arr)){
+			$arr  = $this->db->escape($arr);
+			return $arr;
+		}
+		if(count($arr)>0){
+			foreach ($arr as $key=>$val){
+				$arr[$key] = $this->db->escape($val);
+			}
 		}
 		return $arr;
 	}
