@@ -100,7 +100,7 @@
 					<div>Profile Created By : <?php echo set_default($profile['PersonalInfo']->CreatedBy);?></div>
 					<div>Like To Marry : <?php echo set_default($profile['PersonalInfo']->LikeToMarry);?></div>
 					<div>Marital Status : <?php echo set_default($profile['PersonalInfo']->MaritalStatus);?></div>
-					<div>Date of Bitrh : <?php echo matrimony_date(set_default($profile['PersonalInfo']->DOB));?></div>
+					<div>Date of Birth : <?php echo matrimony_date(set_default($profile['PersonalInfo']->DOB));?></div>
 					<div>Time of Bitrh : <?php echo matrimony_time(set_default($profile['PersonalInfo']->DOB));?></div>
 					<div>Height : <?php echo set_default($profile['PersonalInfo']->Height);?> (in centimeters)</div>
 					<div>Weight : <?php echo set_default($profile['PersonalInfo']->Weight);?> (in kilograms)</div>

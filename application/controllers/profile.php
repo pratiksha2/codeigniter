@@ -57,11 +57,10 @@ class Profile extends CI_Controller {
 		$this->load->view('main', $data);
 	}
 	
-	public function edit()
+	public function edit($id = NULL)
 	{
 		if($this->input->is_ajax_request() && $this->input->post()){
 			$post = $this->input->post();
-			//print_r($post['form']);
 			$this->editProcess($post);
 			return;
 		}
@@ -69,19 +68,23 @@ class Profile extends CI_Controller {
 		$this->load->model('profile_model');
 		$this->load->model('utility_model');
 		
-		$id = $this->users_lib->getUserId();
-		
-		if(empty($id)){
-			redirect('login');
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($id)){
+			// allow admin to edit users profile
+		}else{
+			$id = $this->users_lib->getUserId();
+			
+			if(empty($id)){
+				redirect('login');
+			}
 		}
 		
+		$viewData['ProfileData'] = $this->users_model->getUserBy('id',$id);
 		$this->load->library('formhtml_lib');
-		
-		$location['countries'] = $this->utility_model->getAllCountries();
-		
-		$viewData['locations'] = $location;
-		$viewData['ProfileData'] = $viewData['my'] = $navBarData['my'] = $this->users_model->getUserBy('id',$id);
 		$viewData['profile'] = $this->profile_model->getUserProfileById($id);
+		$viewData['profile']['PartnerSeekingInfo'] = $this->profile_model->getPartnerSeekingInfo($id);
+		$myId = $this->users_lib->getUserId();
+		$viewData['my'] = $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
 		$data['navBarData'] = $navBarData;
 		$data['viewData'] = $viewData;
 		
@@ -97,16 +100,24 @@ class Profile extends CI_Controller {
 		$whichInfo = NULL;
 		$this->load->model('profile_model');
 		switch($post['form']){
-			case 'ContactInfo' 		:	$whichInfo = 'contact_info';	break;
-		    case 'EducationInfo'	:	$whichInfo = 'education_info';	break;
-		    case 'FamilyInfo'		:	$whichInfo = 'family_info';		break;
-		    case 'LocationInfo'		:	$whichInfo = 'location_info';	break;
-		    case 'PersonalInfo'		:	$whichInfo = 'personal_info';	break;
-		    case 'ReligionInfo'		:	$whichInfo = 'religion_info';	break;
-			default 				:	$whichInfo = NULL;				break;
+			case 'ContactInfo' 			:	$whichInfo = 'contact_info';	break;
+		    case 'EducationInfo'		:	$whichInfo = 'education_info';	break;
+		    case 'FamilyInfo'			:	$whichInfo = 'family_info';		break;
+		    case 'LocationInfo'			:	$whichInfo = 'location_info';	break;
+		    case 'PersonalInfo'			:	$whichInfo = 'personal_info';	break;
+		    case 'ReligionInfo'			:	$whichInfo = 'religion_info';	break;
+			case 'PartnerSeekingInfo'	:	$whichInfo = 'partner_seeking';	break;
+			default 					:	$whichInfo = NULL;				break;
 		}
 		unset($post['form']);
-		$this->profile_model->setInfo( $post , $whichInfo );
+		$id = NULL;
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($post['userId'])){
+			// allow admin to edit users profile
+			$id = $post['userId'];
+		}
+		unset($post['userId']);
+		$this->profile_model->setInfo( $post , $whichInfo , $id );
 	}
 	
 }

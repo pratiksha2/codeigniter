@@ -5,6 +5,25 @@
 .info-panel .row div:first-child{
 	line-height:34px;
 }
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
 </style>
 <div class="container demo">
 <div class="row show-grid">
@@ -12,19 +31,65 @@
 		<!-- Thumbnails -->
 		<div class="thumbnail">
 			<img alt="" src="<?php echo base_url();?>assets/img/defaultAvatars.png">
-			<ul class="list-group">
-				<li class="list-group-item">Gender : <?php echo $ProfileData->Gender;?></li>
-				<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
-				<li class="list-group-item">Birthdate : <?php echo matrimony_date($profile['PersonalInfo']->DOB);?></li>
-				<li class="list-group-item">Setings</li>
-			</ul>
+			<div class="class-xs-12">
+				
+			</div>
+			<?php echo form_open('profile/edit');?>
+				<?php echo form_hidden('form', 'users');?>
+				<?php echo form_hidden('userId', $ProfileData->id);?>
+				<ul class="list-group">
+					<li class="list-group-item">
+						Change Avatar : 
+						<span class="btn btn-default btn-file">
+							Browse <input type="file">
+						</span>
+					</li>
+					<li class="list-group-item">
+						First Name<?php echo form_input('FirstName', $ProfileData->FirstName ,'class="form-control"'); ?>
+					</li>
+					<li class="list-group-item">
+						Last Name<?php echo form_input('LastName', $ProfileData->LastName ,'class="form-control"'); ?>
+					</li>					
+					<li class="list-group-item">
+						Gender : 
+						<label>
+						<?php 
+							$data = array( 'name' => 'gender', 'value' => 'Male' );
+							if(strtolower($ProfileData->Gender) == 'male'){$data['checked'] = TRUE;}
+							echo form_radio($data);
+						?>Male
+						</label>
+						<label>
+						<?php 
+							$data = array( 'name' => 'gender', 'value' => 'Female' );
+							if(strtolower($ProfileData->Gender) == 'female'){$data['checked'] = TRUE;}
+							echo form_radio($data);
+						?>Female
+						</label>
+					</li>
+					<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
+					<li class="list-group-item">
+						Birthdate : <?php echo form_input('DOB', matrimony_date($profile['PersonalInfo']->DOB) ,'class="form-control"'); ?>
+					</li>
+					<li class="list-group-item"><?php echo form_submit('UsersSubmit', 'Save', 'id="UsersSubmit" class="btn btn-primary btn-sm"');?></li>
+				</ul>
+			<?php echo form_close();?>	
 		</div><!-- /Thumbnails -->		
 	</div>
 	<div class="col-md-8 left-block">
 		<div class="info-block">
-			<div class="info-text">
+			<div class="info-text info-panel">
 				<h3><?php echo $ProfileData->FirstName . ' ' . $ProfileData->LastName;?></h3>
-				<div class="well">About Me : <?php echo set_default($profile['PersonalInfo']->AboutMe);?></div>
+				<?php echo form_open('profile/edit');?>
+					<?php echo form_hidden('form', 'PersonalInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
+					<div class="well">
+						<div class="row">About Me : <?php echo form_textarea(array("name"=>"AboutMe","value"=>set_default($profile['PersonalInfo']->AboutMe), "class"=>"form-control", "rows"=>"3" ,"cols"=>"3")); ?></div>
+						<div class="row">
+							<div class="col-xs-6 col-md-4"><?php echo form_submit('PersonalInfoSubmit', 'Save', 'id="PersonalInfoSubmit" class="btn btn-primary btn-sm"');?></div>
+						</div>
+					</div>
+				<?php echo form_close();?>
 			</div>
 		</div>
 		<div class="panel panel-default">
@@ -35,6 +100,7 @@
 				<?php if(count($profile['EducationInfo'])){?>
 				<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'EducationInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Education : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -74,6 +140,7 @@
 				<?php if(count($profile['LocationInfo'])){?>
 				<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'LocationInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Living In : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -162,6 +229,7 @@
 				<?php if(count($profile['FamilyInfo'])){?>
 					<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'FamilyInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Live With : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -251,6 +319,7 @@
 				<?php if(count($profile['ReligionInfo'])){?>
 					<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'ReligionInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Mother Tongue : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -291,6 +360,7 @@
 				<?php if(count($profile['PersonalInfo'])){?>
 					<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'PersonalInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Profile Created By : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -384,6 +454,7 @@
 				<?php if(count($profile['ContactInfo'])){?>
 					<?php echo form_open('profile/edit');?>
 					<?php echo form_hidden('form', 'ContactInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Mobile : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
@@ -404,6 +475,64 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-6 col-md-4"><?php echo form_submit('ContactInfoSubmit', 'Save', 'id="ContactInfoSubmit" class="btn btn-primary btn-sm"');?></div>
+					</div>
+					<?php echo form_close();?>
+				<?php } ?>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Partner Seeking For</h3>
+			</div>
+			<div class="panel-body info-panel">
+				<?php if(count($profile['PartnerSeekingInfo'])){?>
+					<?php echo form_open('profile/edit');?>
+					<?php echo form_hidden('form', 'PartnerSeekingInfo');?>
+					<?php echo form_hidden('userId', $ProfileData->id);?>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Age : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_input('Age', $profile['PartnerSeekingInfo']->Age ,'class="form-control" placeholder="18"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Marital Status : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('MaritalStatus', $this->formhtml_lib->getFieldValues('MaritalStatus') , $profile['PartnerSeekingInfo']->MaritalStatus ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Manglik : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('Manglik', $this->formhtml_lib->getFieldValues('Manglik') , $profile['PartnerSeekingInfo']->Manglik ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Religion - Caste : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('ReligionCaste', $this->formhtml_lib->getFieldValues('ReligionCaste') , $profile['PartnerSeekingInfo']->ReligionCaste ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Mother Tongue : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('MotherTongue', $this->formhtml_lib->getLanguages() , $profile['PartnerSeekingInfo']->MotherTongue ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Education : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('Education', $this->formhtml_lib->getFieldValues('Education') , $profile['PartnerSeekingInfo']->Education ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4">Profession : </div>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('Profession', $this->formhtml_lib->getFieldValues('Profession') , $profile['PartnerSeekingInfo']->Profession ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-4"><?php echo form_submit('PartnerSeekingInfoSubmit', 'Save', 'id="PartnerSeekingInfoSubmit" class="btn btn-primary btn-sm"');?></div>
 					</div>
 					<?php echo form_close();?>
 				<?php } ?>
