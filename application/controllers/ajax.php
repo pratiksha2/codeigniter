@@ -34,6 +34,56 @@ class Ajax extends CI_Controller {
 		echo json_encode($countries);
 	}
 	
+	public function remove_admin($UserID){
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin!=TRUE){
+			$return = array('err' => 'You are not authorised to perform this action.');
+			echo json_encode($return);
+			return;
+		}		
+		
+		$this->load->model('admin_model');
+		$isLastAdmin = $this->admin_model->isLastAdmin();
+		if($isLastAdmin == TRUE){
+			$return = array('err' => 'Only one Admin is left for your site.');
+		}else{
+			$isRemoved = $this->admin_model->remove_admin($UserID);
+			if($isRemoved == TRUE){
+				$return = array('success' => 'is removed from Admin List.');
+			}else{
+				$return = array('err' => 'unable to perform action.');
+			}			
+		}
+		echo json_encode($return);
+	}
+	
+	public function make_admin($UserID){
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin!=TRUE){
+			$return = array('err' => 'You are not authorised to perform this action.');
+			echo json_encode($return);
+			return;
+		}
+		
+		$isUserAdmin = $this->users_lib->isAdmin($UserID);
+		if($isUserAdmin==TRUE){
+			$return = array('success' => 'is already promoted to admin.');
+			echo json_encode($return);
+			return;
+		}
+		
+		$adminId = $this->users_lib->getUserId();
+		$this->load->model('admin_model');
+		$isAdded = $this->admin_model->make_admin( $UserID , $adminId );
+		if($isAdded == TRUE){
+			$return = array('success' => 'is added to site Admin List.');
+		}else{
+			$return = array('err' => 'unable to perform action.');
+		}
+		echo json_encode($return);
+	}
+	
+	
 }
 
 /* End of file welcome.php */

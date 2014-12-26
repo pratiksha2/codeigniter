@@ -6,35 +6,63 @@ class Search_model extends CI_Model {
 	
 		$search = array_filter($params);	// blank or empty element eliminated
 		
-		$this->load->database();
-		//array_walk($search,"$this->db->escape");
+		foreach($search as $key=>$tmp){
+			if( $tmp == 'Will Tell You Later' ){
+				unset($search[$key]);
+			}
+		}
+		
+		$default = array(
+            'gender' 	=> NULL,
+            'ageFrom' 	=> NULL,
+            'ageTo' 	=> NULL,
+            'MaritalStatus' 	=> NULL,
+            'Manglik' 	=> NULL,
+            'ReligionCaste' 	=> NULL,
+            'MotherTongue' 	=> NULL,
+            'LivingIn' 	=> NULL,
+            'Education' => NULL,
+            'page' 	=> 1,
+            'limit' => 1,
+        );
+        /* Merge with input options */
+        $search = array_merge($default, $search);
+		
+		
 		
 		return $search;
 		
 	}
 	
-	public function search( $params , $currentPage=1 , $limit = 1 ){
+	public function search( $params ){
 		
-		$cleanedOutput = $this->getCleanedParams( $params );
+		$params = $this->getCleanedParams( $params );
+		
+		$currentPage = $params['page'];
+		$limit = $params['limit'];
 		
 		$sqls = $this->searchQueryBuilder( $params );
-		
 		$this->load->database();		
 		$sql = $sqls['sqlAll'];
 		$query = $this->db->query($sql);
 		$totalCount = $query->first_row()->counter;
-		
+		$searchResults = NULL;
 		if($totalCount>0){
 			$totalPages = round(($totalCount / $limit));
 			$offset = ($currentPage-1) * $limit;
-
-			$sql = $sqls['sql']." LIMIT ".$offset." , ".$limit;
+			
+			if(isset($params['orderBy'])){
+				$sql = $sqls['sql']." ORDER BY ".$params['orderBy']." LIMIT ".$offset." , ".$limit;
+			}else{
+				$sql = $sqls['sql']." LIMIT ".$offset." , ".$limit;
+			}
 			$query = $this->db->query($sql);
 			$search = $query->result();
 			$searchResults = array(
 										'totalPages' => $totalPages,
 										'currentPage' => $currentPage,
-										'search' => $search
+										'search' => $search,
+										'params' => $params,
 									);
 		}
 		return $searchResults;
@@ -56,7 +84,7 @@ class Search_model extends CI_Model {
 		$andArr[] = "( u.Activated = '1' AND u.Blocked = '0' )";
 		
 		
-        if(in_array($searchParams['gender'],array('male','female'))){
+        if(in_array(strtolower($searchParams['gender']),array('male','female'))){
             $andArr[] = '( u.Gender = '.$this->db->escape($searchParams['gender']).' )';
         }
         if(isset($searchParams['ageFrom'])){
@@ -133,6 +161,9 @@ class Search_model extends CI_Model {
             $oldKey = $key;
         }
         
+		if(in_array('personal_info per',$tbls)){
+			$cols[] = 'per.AboutMe';
+		}
         
         //echo $joinStr;
 		if(empty($orArr)){
@@ -163,8 +194,14 @@ class Search_model extends CI_Model {
 		return $dt;
 	}
 	function getEscapedArray($arr=array()) {
-		foreach ($arr as $key=>$val){
-			$arr[$key] = $this->db->escape($val);
+		if(!is_array($arr)){
+			$arr  = $this->db->escape($arr);
+			return $arr;
+		}
+		if(count($arr)>0){
+			foreach ($arr as $key=>$val){
+				$arr[$key] = $this->db->escape($val);
+			}
 		}
 		return $arr;
 	}

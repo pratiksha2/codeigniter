@@ -5,7 +5,8 @@
 </style>
 <div class="container">
 	<div id="search-box" class="col-xs-12 col-sm-10 col-md-10">
-		<?php echo form_open('search/results');?>
+		<?php $attributes = array('method' => 'get');?>
+		<?php echo form_open('search/results',$attributes);?>
 		<div class="row">
 			<div class="col-xs-2"><?php echo form_label('Looking for');?></div>
 			<div class="col-xs-10">
@@ -53,8 +54,13 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-2"><?php echo form_label('Marital Status', 'maritalStatus');?></div>
-			<div class="col-xs-10"><?php echo form_dropdown('MaritalStatus', $this->formhtml_lib->getFieldValues('MaritalStatus') , 'Single' ,'class="form-control" id="maritalStatus"'); ?></div>
+			<div class="col-xs-2"><?php echo form_label('Marital Status');?></div>
+			<div class="col-xs-10">
+				<?php echo form_label(form_checkbox('MaritalStatus[]','Single').'Single');?>
+				<?php echo form_label(form_checkbox('MaritalStatus[]','Divorced').'Divorced');?>
+				<?php echo form_label(form_checkbox('MaritalStatus[]','Widowed').'Widowed');?>
+				<?php echo form_label(form_checkbox('MaritalStatus[]','Separated').'Separated');?>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-2"><?php echo form_label('Religion - Caste', 'ReligionCaste');?></div>

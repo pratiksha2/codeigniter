@@ -5,7 +5,7 @@
 	}
 </style>
 <div class="container">
-	<?php if(isset($searchData) && ($searchData['totalPages']>0 && $searchData['totalPages']>=$searchData['currentPage'])){?>
+	<?php if(isset($searchData) /*&& ($searchData['totalPages']>0 && $searchData['totalPages']>=$searchData['currentPage'])*/){?>
 	<div id="search-results" class="row">
 	<?php foreach($searchData['search'] as $search){?>
 		<div class="panel panel-primary">
@@ -51,6 +51,7 @@
 		</div>
 	<?php } ?>
 	</div>
+	<?php /*
 	<div class="row">
 		<nav style="text-align: center">
             <ul class="pagination">
@@ -73,7 +74,7 @@
 				<?php } ?>		
 			</ul>
 		</nav>
-	</div>
+	</div> */?>
 	<?php } else { ?>
 		<div class="row center">No Result Found</div>
 	<?php } ?>

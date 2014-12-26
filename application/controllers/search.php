@@ -35,9 +35,9 @@ class Search extends CI_Controller {
 	public function results()
 	{
 		$searchData = NULL;
-		if($this->input->post()){
-			$post = $this->input->post();
-			$searchData = $this->doSearch($post);
+		if($this->input->get()){
+			$get = $this->input->get();
+			$searchData = $this->doSearch($get);
 		}
 		$myId = $this->users_lib->getUserId();
 		if(empty($myId)){
@@ -54,16 +54,48 @@ class Search extends CI_Controller {
 		$this->load->view('main', $data);
 	}
 	
-	public function doSearch($post){
-		if(empty($this->input->post()) || empty($post)){
+	public function suggestions()
+	{
+		$myId = $this->users_lib->getUserId();
+		if(empty($myId)){
+			redirect('login');
+		}
+		
+		$this->load->model('users_model');
+		
+		$this->load->library('formhtml_lib');
+		$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+		$searchGender = 'Male';
+		if(strtolower($navBarData['my']->Gender)=='male'){
+			$searchGender = 'Female';
+		}
+		$get = $this->users_model->getSuggestionsParams($myId);
+		$get['gender'] = $searchGender;
+		$get['MaritalStatus'] = array($get['MaritalStatus']);
+		$get['Manglik'] = array($get['Manglik']);
+		$get['orderBy'] = ' RAND() ';
+		$searchData = $this->doSearch($get);
+		
+		$viewData['searchData'] = $searchData;		
+		$data['navBarData'] = $navBarData;
+		$data['viewData'] = $viewData;
+		$data['view']='magic_search';
+		$data['document']['title']='Matrimony Site - Suggestions';
+		$this->load->view('main', $data);
+	}
+	
+	public function doSearch($get){
+		if(empty($get)){
 			redirect('search');
 		}
 		$this->load->model('search_model');
 		
-		$searchResult = $this->search_model->search($post);
+		$searchResult = $this->search_model->search($get);
 		
 		return $searchResult;
 	}
+	
+	
 	
 }
 
