@@ -22,13 +22,19 @@ class Ajax extends CI_Controller {
 		
 	}
 	
-	public function getcity($chars){
+	public function getcities($state = NULL) {
 		$this->load->model('utility_model');
-		$cities = $this->utility_model->getCities($chars);
+		$cities = $this->utility_model->getCities($state);
 		echo json_encode($cities);
 	}
 	
-	public function getcountry($chars){
+	public function getstates($country = NULL) {
+		$this->load->model('utility_model');
+		$states = $this->utility_model->getStates($country);
+		echo json_encode($states);
+	}
+
+	public function getcountry($chars) {
 		$this->load->model('utility_model');
 		$countries = $this->utility_model->getCountries($chars);
 		echo json_encode($countries);

@@ -23,8 +23,13 @@ class Profile extends CI_Controller {
 	}
 	
 	public function view($id){
-		if(empty($id) || !is_numeric($id) || $id <= 0){
-			$id = $this->users_lib->getUserId();
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($id)){
+			// allow admin to edit users profile
+		}else{
+			if(empty($id) || !is_numeric($id) || $id <= 0){
+				$id = $this->users_lib->getUserId();
+			}
 		}
 		if(empty($id)){
 			redirect('home');

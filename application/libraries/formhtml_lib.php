@@ -22,7 +22,7 @@ class Formhtml_lib {
 		$states = $CI->utility_model->getStates($country);
 		$stateList = NULL;
 		foreach($states as $state){
-			$stateList[$state->subdivision_name] = $state->subdivision_name;
+			$stateList[$state->state] = $state->state;
 		}
 		return $stateList;
 	}
@@ -36,7 +36,7 @@ class Formhtml_lib {
 		$cities = $CI->utility_model->getCities($state);
 		$cityList = NULL;
 		foreach($cities as $city){
-			$cityList[$city->city_name] = $city->city_name;
+			$cityList[$city->city] = $city->city;
 		}
 		return $cityList;
 	}

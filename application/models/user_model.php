@@ -36,7 +36,7 @@ class User_model extends CI_Model {
     'Password'=>md5($this->input->post('password')),
 	'Blocked'=>$this->input->post(0),
 	'Gender'=>$this->input->post('gender'),
-	'Email_verification_code'=>$activationCode,
+	'EmailVerificationCode'=>$activationCode,
 	'UserType'=>$this->input->post(1),
 	'LoginID'=>$this->input->post('loginId')
   );
@@ -70,43 +70,45 @@ class User_model extends CI_Model {
 	$return = array();
 	if($result->num_rows() > 0) {
 		foreach($result->result_array() as $row) {
-		  $return[$row['id']] = $row['MotherTongue'];
+		  $return[$row['id']] = $row['ascii_name'];
 		}
 	}
 
 	return $return;
 }
 public function geteducation(){
-	$this->db->from('education');
+	$this->db->from('education_info');
 	$this->db->order_by('id');
 	$result = $this->db->get();
 	$return = array();
 	if($result->num_rows() > 0) {
 		foreach($result->result_array() as $row) {
-		  $return[$row['id']] = $row['education'];
+		  $return[$row['id']] = $row['Education'];
 		}
 	}
 
 	return $return;
 }
 public function getprofession(){
-	$this->db->from('profession');
+	$this->db->from('education_info');
 	$this->db->order_by('id');
 	$result = $this->db->get();
 	$return = array();
 	if($result->num_rows() > 0) {
 		foreach($result->result_array() as $row) {
-		  $return[$row['id']] = $row['profession'];
+		  $return[$row['id']] = $row['Profession'];
 		}
 	}
 
 	return $return;
 }
 public function add_partnerSeeking() {
+	$myId = $this->users_lib->getUserId();
+	if(!empty($myId)){
+	$age = $this->input->post('ageto')."-".$this->input->post('agefrom');
 	$data=array(
-    'Age'=>$this->input->post('ageto'),
-	//'UserID'=>,
-	'Lastname'=>$this->input->post('agefrom'),
+    'Age'=>$age,
+	'UserID'=>$myId,
     'MaritalStatus'=>$this->input->post('maritalstatus'),
     'Manglik'=>md5($this->input->post('manglik')),
 	'ReligionCaste'=>$this->input->post('religion'),
@@ -115,7 +117,8 @@ public function add_partnerSeeking() {
 	'Profession'=>$this->input->post('profession'),
   );
   $this->db->insert('partner_seeking',$data);
-
+ }
+ 
 }
 function EmailModel(){
   parent::Model();
@@ -147,24 +150,44 @@ function EmailModel(){
   
  }
   function verifyEmailAddress($verificationcode){  
-  $sql = "update users set Activated=1 WHERE Email_verification_code='".$verificationcode."'";
+  $sql = "update users set Activated=1 WHERE EmailVerificationCode=' '";
   $this->db->query($sql, array($verificationcode));
   return $this->db->affected_rows(); 
  }
  function resetPasswordCode($resetCode,$email){
-	$sql = "update users set Reset_code='".$resetCode."' WHERE Email='".$email."'";
+	$sql = "update users set ResetCode='".$resetCode."' WHERE Email='".$email."'";
     $this->db->query($sql, array($resetCode));
     $this->db->affected_rows(); 
 	$content = "Dear User,\nPlease click on below URL or paste into your browser to rest your Password\n http://localhost/codeigniter/user/reset/".$resetCode."\n"."\n\nThanks\nAdmin Team" ;
 	$this->sendVerificatinEmail($resetCode,$email,$content);
  }
  function addNewPassword(){
-	$newpasword = $this->input->post('newpasword');
+	$newpasword = md5($this->input->post('newpasword'));
 	$resetCode = $this->input->post('resetCode');
-	$sql = "update users set Reset_code='',Password = '".$newpasword."'  WHERE Reset_code='".$resetCode."'";
+	$sql = "update users set ResetCode = ' ',Password = '".$newpasword."'  WHERE ResetCode='".$resetCode."'";
     $this->db->query($sql, array($resetCode));
    return $this->db->affected_rows(); 
  
+ }
+ function contactus(){
+	$data=array(
+    'Name'=>$this->input->post('name'),
+    'Email'=>$this->input->post('email'),
+    'Mob'=>md5($this->input->post('mob')),
+	'Query'=>$this->input->post('query'),
+  );
+  $this->db->set('PostDate', 'NOW()', FALSE);
+  $this->db->insert('contact',$data);
+  //send email
+    $this->db->select('u.email');
+	$this->db->from('users u');
+    $this->db->join('admin a', 'a.UserID = u.id', 'left'); 
+    $query = $this->db->get();
+	$content = "New user Contact u please check";
+	foreach ($query->result() as $row)
+	{
+	  $this->sendVerificatinEmail('',$row->email,$content);
+	} 
  }
 }
 ?>

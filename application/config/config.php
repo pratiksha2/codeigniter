@@ -28,7 +28,6 @@ $config['base_url']	= 'http://localhost/codeigniter/';
 |
 */
 $config['index_page'] = '';
-
 /*
 |--------------------------------------------------------------------------
 | URI PROTOCOL

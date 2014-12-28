@@ -144,19 +144,19 @@
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Living In : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('LivingIn', $this->formhtml_lib->getCountryList() , $profile['LocationInfo']->LivingIn ,'class="form-control"'); ?>
+							<?php echo form_dropdown('LivingIn', $this->formhtml_lib->getCountryList() , $profile['LocationInfo']->LivingIn ,'class="form-control" id="country"'); ?>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">State : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('State', $this->formhtml_lib->getStateList($profile['LocationInfo']->LivingIn) , $profile['LocationInfo']->State ,'class="form-control"'); ?>
+							<?php echo form_dropdown('State', $this->formhtml_lib->getStateList($profile['LocationInfo']->LivingIn) , $profile['LocationInfo']->State ,'class="form-control" id="state"'); ?>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">City : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('City', $this->formhtml_lib->getCityList($profile['LocationInfo']->State) , $profile['LocationInfo']->City ,'class="form-control"'); ?>
+							<?php echo form_dropdown('City', $this->formhtml_lib->getCityList($profile['LocationInfo']->State) , $profile['LocationInfo']->City ,'class="form-control" id="city"'); ?>
 						</div>
 					</div>
 					<div class="row">
@@ -554,5 +554,37 @@
 			});
 			return false;
 		});
+		
+		
+		$('#country').change(function(){
+            $.ajax({
+                url: '<?php echo base_url();?>ajax/getstates/'+$(this).val(),
+                dataType:'JSON',
+                success:function(data){
+                    $options = '<option value="">Select State</option>';
+                    for(i=0; i<data.length; i++){
+                        $options += '<option value="'+data[i].state+'">'+data[i].state+'</option>';
+                    }
+					alert($options);
+                    $('#state').html($options);
+                }
+            });
+        });
+        $('#state').change(function(){
+            $.ajax({
+                url: '<?php echo base_url();?>ajax/getcities/'+$(this).val(),
+                dataType:'JSON',
+                success:function(data){
+                    $options = '<option value="">Select City</option>';
+                    for(i=0; i<data.length; i++){
+                        $options += '<option value="'+data[i].city+'">'+data[i].city+'</option>';
+                    }
+                    $('#city').html($options);
+                }
+            });
+        });
+		
+		
+		
 	});
 </script>

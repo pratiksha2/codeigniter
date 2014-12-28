@@ -4,6 +4,7 @@ class User extends CI_Controller{
  {
   parent::__construct();
   $this->load->model('user_model');
+   $this->load->library('form_validation');
  }
  public function index()
  {
@@ -15,25 +16,16 @@ class User extends CI_Controller{
    $data['title']= 'Home';
    $this->load->view('header_view',$data); 
    $this->load->view("home_view.php", $data);
-   $this->load->view('footer_view',$data);
+   $this->load->view('footer',$data);
   //}
  }
  public function welcome()
  {
-  $data['title']= 'Welcome';
-  $this->load->view('header_view',$data);
-  $this->load->view('welcome_view.php', $data);
-  $this->load->view('footer_view',$data);
+  $data['view']='welcome_view';
+  $data['document']['title']='Matrimony Site - Welcome';
+  $this->load->view('main', $data);
  }
- public function login()
- {
-  $email=$this->input->post('email');
-  $password=md5($this->input->post('pass'));
-
-  $result=$this->user_model->login($email,$password);
-  if($result) $this->welcome();
-  else        $this->index();
- }
+ 
  public function thank()
  {
  $this->load->library('form_validation');
@@ -42,13 +34,11 @@ class User extends CI_Controller{
   $this->form_validation->set_rules('lname', 'User Last Name', 'trim|xss_clean');
   $this->form_validation->set_rules('loginId', 'LoginId', 'is_unique[users.LoginID]');
   $this->form_validation->set_rules('email', 'Your Email', 'trim|required|valid_email|is_unique[users.Email]');
-  $this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[32]');
-  $this->form_validation->set_rules('cpassword', 'Password Confirmation', 'trim|required|matches[password]');
-
-  if($this->form_validation->run() == FALSE && $this->session->userdata('userID') !== false)
+  $this->form_validation->set_rules('password', 'Password', 'required|matches[cpassword]');
+  $this->form_validation->set_rules('cpassword', 'Password Confirmation', 'required');
+  if($this->form_validation->run() == FALSE || $this->session->userdata('userID') !== false)
   {
    $this->load->view("registration_view.php");
-   $this->load->view('footer_view');
   }
   else
   {
@@ -56,9 +46,7 @@ class User extends CI_Controller{
    $random_hash = substr(md5(uniqid(rand(), true)), 16, 16);
    $this->user_model->add_user($random_hash);
    $this->sendVerificationEmail($email,$random_hash);
-   $data['title']= 'Thank';
-  $this->load->view('login.php', $data);
-  $this->load->view('footer_view',$data);
+   redirect('login');
   }
   
  }
@@ -66,28 +54,23 @@ class User extends CI_Controller{
  {
   $data['title']= 'Home';
   $this->load->view("registration_view.php", $data);
-  $this->load->view('footer_view',$data);
  }
- public function logout()
- {
-  $newdata = array(
-  'user_id'   =>'',
-  'user_name'  =>'',
-  'user_email'     => '',
-  'logged_in' => FALSE,
-  );
-  $this->session->unset_userdata($newdata );
-  $this->session->sess_destroy();
-  $this->index();
- }
+
  public function partnerSeeking() 
  {
-	$data['title']= 'Partner Seeking';
-	$data['religion'] = $this->user_model->getreligion();
-	$data['language'] = $this->user_model->getlanguage();
-	$data['education'] = $this->user_model->geteducation();
-	$data['profession'] = $this->user_model->getprofession();
-	$this->load->view("partner_seeking.php", $data);
+	$viewData['title']= 'Partner Seeking';
+	$viewData['religion'] = $this->user_model->getreligion();
+	$viewData['language'] = $this->user_model->getlanguage();
+	$viewData['education'] = $this->user_model->geteducation();
+	$viewData['profession'] = $this->user_model->getprofession();
+	$myId = $this->users_lib->getUserId();
+	$this->load->model('users_model');
+	$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+	$data['navBarData'] = $navBarData;
+	$data['viewData'] = $viewData;
+	$data['view']='partner_seeking';
+	$data['document']['title']='Matrimony Site - Partner';
+	$this->load->view('main', $data);
  }
  public function partner()
  {
@@ -95,16 +78,24 @@ class User extends CI_Controller{
   // field name, error message, validation rules
   $this->form_validation->set_rules('ageto', 'User Age to', 'trim|xss_clean|integer');
   $this->form_validation->set_rules('agefrom', 'User Age From', 'trim|xss_clean|integer');
-  if($this->form_validation->run() == FALSE)
+  $myId = $this->users_lib->getUserId();
+  if(empty($myId)){
+	redirect('login');
+  }	
+  elseif($this->form_validation->run() == FALSE)
   {
    $this->partnerSeeking();
   }
   else
   {
 	$this->user_model->add_partnerSeeking();
-	$data['title']= 'Partner';
-	$this->load->view('home_view.php', $data);
-	$this->load->view('footer_view',$data);
+	$myId = $this->users_lib->getUserId();
+	$this->load->model('users_model');
+	$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+	$data['navBarData'] = $navBarData;
+	$data['view']='profile';
+	$data['document']['title']='Matrimony Site - Partner';
+	$this->load->view('main', $data);
   }
   
  }
@@ -139,11 +130,16 @@ public function doforget()
 	}
 public function reset(){
 	$resetCode = $this->uri->segment(3);
-	
 	if(isset($resetCode) && $resetCode != '') {
-	$q = $this->db->query("select * from users where Reset_code='" . $resetCode . "'");
+	$q = $this->db->query("select * from users where ResetCode='" . $resetCode . "'");
 	if ($q->num_rows > 0) {
-		$this->load->view('reset_view');
+		$myId = $this->users_lib->getUserId();
+		$this->load->model('users_model');
+		$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+		$data['navBarData'] = $navBarData;
+		$data['view']='reset_view';
+		$data['document']['title']='Matrimony Site - reset';
+		$this->load->view('main', $data);  
 	}
 	}
 	else {
@@ -152,10 +148,22 @@ public function reset(){
 }
 function newPassword()
 {
-	if ($this->input->post('newpassword')) {
-		$this->user_model->addNewPassword();
-		$this->load->view('login.php');
+	$this->form_validation->set_rules('newpassword', 'Password', 'required|matches[confirmpassword]');
+	$this->form_validation->set_rules('confirmpassword', 'Password Confirmation', 'required');
+	if ($this->form_validation->run() == FALSE) {
+		$data['view']='reset_view';
+		$data['document']['title']='Matrimony Site - reset_view';
 	}
+	else {
+		$this->user_model->addNewPassword();
+		$myId = $this->users_lib->getUserId();
+		$this->load->model('users_model');
+		$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+		$data['navBarData'] = $navBarData;
+		$data['view']='login';
+		$data['document']['title']='Matrimony Site - login';  
+	}
+	$this->load->view('main', $data);
 }	
 	
 function verify($verificationText=NULL){  
@@ -165,16 +173,57 @@ function verify($verificationText=NULL){
   }else{
    $error = array( 'error' => "Sorry Unable to Verify Your Email!"); 
   }
-  $data['errormsg'] = $error; 
-  $this->load->view('verify_view.php', $data);   
+  $data['errormsg'] = $error;
+  $myId = $this->users_lib->getUserId();
+  $this->load->model('users_model');
+  $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+  $data['navBarData'] = $navBarData;
+  $data['view']='verify_view';
+  $data['document']['title']='Matrimony Site - verify';
+  $this->load->view('main', $data);  
 }
 
 
 function sendVerificationEmail($email,$random_code){  
   $content = "Dear User,\nPlease click on below URL or paste into your browser to verify your Email Address\n\n http://localhost/codeigniter/user/verify/".$random_code."\n"."\n\nThanks\nAdmin Team";
   $this->user_model->sendVerificatinEmail($email,$random_code,$content);
-  $this->load->view('index.php', $data);   
+  $this->index();
 }
-
+function terms(){
+	$myId = $this->users_lib->getUserId();
+    $this->load->model('users_model');
+    $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+    $data['navBarData'] = $navBarData;
+	$data['view']='term_condition';
+	$data['document']['title']='Matrimony Site - Terms';
+	$this->load->view('main', $data);
+}
+function contactus(){
+	$myId = $this->users_lib->getUserId();
+    $this->load->model('users_model');
+    $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+    $data['navBarData'] = $navBarData;
+	$data['view']='contactus';
+	$data['document']['title']='Matrimony Site - Contact Us';
+	$this->load->view('main', $data);
+}
+function contact_thank() {
+	$this->form_validation->set_rules('email', 'Your Email', 'trim|required|valid_email');
+	$this->form_validation->set_rules('mob', 'Mobile number', 'trim|numeric|xss_clean');
+	$myId = $this->users_lib->getUserId();
+    $this->load->model('users_model');
+    $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
+    $data['navBarData'] = $navBarData;
+	if($this->form_validation->run() == FALSE) {		
+	  $data['view']='contactus';
+	  $data['document']['title']='Matrimony Site - Contact Us';
+    }
+    else {
+		$this->user_model->contactus();
+		$data['view']='thank_you';
+		$data['document']['title']='Matrimony Site - Thank You';
+    }
+	$this->load->view('main', $data);
+}
 }
 ?>
