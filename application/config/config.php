@@ -15,6 +15,7 @@
 |
 */
 $config['base_url']	= 'http://localhost/codeigniter/';
+//$config['base_url']	= 'http://183.87.8.94/codeigniter/';
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,6 @@ $config['base_url']	= 'http://localhost/codeigniter/';
 |
 */
 $config['index_page'] = '';
-
 /*
 |--------------------------------------------------------------------------
 | URI PROTOCOL
@@ -315,6 +315,7 @@ $config['csrf_expire'] = 7200;
 | by the output class.  Do not 'echo' any values with compression enabled.
 |
 */
+$config['compress_output'] = TRUE;
 $config['compress_output'] = FALSE;
 
 /*

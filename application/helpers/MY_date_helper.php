@@ -60,3 +60,17 @@ if ( ! function_exists('matrimony_time'))
 		return date('h:i A', $time);
 	}
 }
+
+if ( ! function_exists('getAge'))
+{
+	function getAge( $dateString = '')
+	{
+		if($dateString==''){
+			return;
+		}
+		$from = new DateTime($dateString);
+		$to   = new DateTime('today');
+		return $from->diff($to)->y;
+	}
+}
+

@@ -57,20 +57,67 @@ class Profile extends CI_Controller {
 		$this->load->view('main', $data);
 	}
 	
-	public function edit()
+	public function edit($id = NULL)
 	{
-		$id = $this->users_lib->getUserId();
+		if($this->input->is_ajax_request() && $this->input->post()){
+			$post = $this->input->post();
+			$this->editProcess($post);
+			return;
+		}
 		$this->load->model('users_model');
 		$this->load->model('profile_model');
+		$this->load->model('utility_model');
+		
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($id)){
+			// allow admin to edit users profile
+		}else{
+			$id = $this->users_lib->getUserId();
+			
+			if(empty($id)){
+				redirect('login');
+			}
+		}
+		
 		$viewData['ProfileData'] = $this->users_model->getUserBy('id',$id);
-		$viewData['myProfile'] = $this->profile_model->getUserProfileById($id);
+		$this->load->library('formhtml_lib');
+		$viewData['profile'] = $this->profile_model->getUserProfileById($id);
+		$viewData['profile']['PartnerSeekingInfo'] = $this->profile_model->getPartnerSeekingInfo($id);
 		$myId = $this->users_lib->getUserId();
 		$viewData['my'] = $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
 		$data['navBarData'] = $navBarData;
 		$data['viewData'] = $viewData;
+		
+		
+		
 		$data['view']='profile/edit';
 		$data['document']['title']='Matrimony Site - Edit Profile';
 		$this->load->view('main', $data);
+	}
+	
+	public function editProcess($post)
+	{
+		$whichInfo = NULL;
+		$this->load->model('profile_model');
+		switch($post['form']){
+			case 'ContactInfo' 			:	$whichInfo = 'contact_info';	break;
+		    case 'EducationInfo'		:	$whichInfo = 'education_info';	break;
+		    case 'FamilyInfo'			:	$whichInfo = 'family_info';		break;
+		    case 'LocationInfo'			:	$whichInfo = 'location_info';	break;
+		    case 'PersonalInfo'			:	$whichInfo = 'personal_info';	break;
+		    case 'ReligionInfo'			:	$whichInfo = 'religion_info';	break;
+			case 'PartnerSeekingInfo'	:	$whichInfo = 'partner_seeking';	break;
+			default 					:	$whichInfo = NULL;				break;
+		}
+		unset($post['form']);
+		$id = NULL;
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($post['userId'])){
+			// allow admin to edit users profile
+			$id = $post['userId'];
+		}
+		unset($post['userId']);
+		$this->profile_model->setInfo( $post , $whichInfo , $id );
 	}
 	
 }

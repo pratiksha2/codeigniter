@@ -58,5 +58,36 @@ class Profile_model extends CI_Model {
 		$ReligionInfo = $query->first_row();
 		return $ReligionInfo;
 	}
+	public function getPartnerSeekingInfo($id){
+		$this->load->database();		
+		$sql = "SELECT * FROM partner_seeking WHERE UserID = " . $this->db->escape($id) . " LIMIT 1";
+		$query = $this->db->query($sql);
+		$PartnerSeekingInfo = $query->first_row();
+		return $PartnerSeekingInfo;
+	}
+		
+		
+	public function setInfo( $post , $whichInfo , $id = NULL ){
+		$allowedTables = array('contact_info','education_info','family_info','location_info','personal_info','religion_info','partner_seeking');
+		if(!in_array($whichInfo,$allowedTables)){
+			return;
+		}
+		
+		$this->load->database();
+		if(empty($id)){
+			$id = $this->users_lib->getUserId();
+		}
+		$fields = $fieldsArr = NULL;
+		foreach($post as $key => $val){
+			$fieldsArr[] = $this->db->escape_str($key) . " = " . $this->db->escape($val);
+		}
+		if(empty($fieldsArr)){
+			return;
+		}
+		$fields = implode(' , ' , $fieldsArr);
+		$sql = "UPDATE " . $whichInfo . " SET " . $fields . " WHERE UserID = " . $this->db->escape($id) . " LIMIT 1";
+		$query = $this->db->query($sql);
+		
+	}
 		
 }

@@ -21,8 +21,7 @@
 	.footer {
 		width: 100%;
 		background-color: #f5f5f5;
-	}
-	
+	}	
 	</style>
       <?php /*----Load External CSS-----*/  ?>
    <?php if(   isset($document['externalCss']) && count($document['externalCss']) ){?>

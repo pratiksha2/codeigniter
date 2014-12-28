@@ -19,5 +19,16 @@ class Users_model extends CI_Model {
 		return $user;
 	}
 	
+	public function getSuggestionsParams($id = NULL){
+		if(empty($value)){
+			$id = $this->users_lib->getUserId();
+		}
+		$this->load->database();
+		$sql = "SELECT Age+1 as AgeTo,Age-1 as AgeFrom, MaritalStatus, Manglik, ReligionCaste, MotherTongue, Education, Profession FROM partner_seeking WHERE UserID = " . $this->db->escape($id) . " LIMIT 1";
+		$query = $this->db->query($sql);
+		$partner_seeking = (array)$query->first_row();
+		return $partner_seeking;
+	}
+	
 	
 }

@@ -1,0 +1,90 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Ajax extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -  
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in 
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see http://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function index()
+	{
+		
+	}
+	
+	public function getcity($chars){
+		$this->load->model('utility_model');
+		$cities = $this->utility_model->getCities($chars);
+		echo json_encode($cities);
+	}
+	
+	public function getcountry($chars){
+		$this->load->model('utility_model');
+		$countries = $this->utility_model->getCountries($chars);
+		echo json_encode($countries);
+	}
+	
+	public function remove_admin($UserID){
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin!=TRUE){
+			$return = array('err' => 'You are not authorised to perform this action.');
+			echo json_encode($return);
+			return;
+		}		
+		
+		$this->load->model('admin_model');
+		$isLastAdmin = $this->admin_model->isLastAdmin();
+		if($isLastAdmin == TRUE){
+			$return = array('err' => 'Only one Admin is left for your site.');
+		}else{
+			$isRemoved = $this->admin_model->remove_admin($UserID);
+			if($isRemoved == TRUE){
+				$return = array('success' => 'is removed from Admin List.');
+			}else{
+				$return = array('err' => 'unable to perform action.');
+			}			
+		}
+		echo json_encode($return);
+	}
+	
+	public function make_admin($UserID){
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin!=TRUE){
+			$return = array('err' => 'You are not authorised to perform this action.');
+			echo json_encode($return);
+			return;
+		}
+		
+		$isUserAdmin = $this->users_lib->isAdmin($UserID);
+		if($isUserAdmin==TRUE){
+			$return = array('success' => 'is already promoted to admin.');
+			echo json_encode($return);
+			return;
+		}
+		
+		$adminId = $this->users_lib->getUserId();
+		$this->load->model('admin_model');
+		$isAdded = $this->admin_model->make_admin( $UserID , $adminId );
+		if($isAdded == TRUE){
+			$return = array('success' => 'is added to site Admin List.');
+		}else{
+			$return = array('err' => 'unable to perform action.');
+		}
+		echo json_encode($return);
+	}
+	
+	
+}
+
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */
