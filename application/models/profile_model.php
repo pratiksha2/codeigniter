@@ -90,4 +90,28 @@ class Profile_model extends CI_Model {
 		
 	}
 		
+	public function	setBasicInfo( $post , $id ){
+		$this->load->database();
+		if(empty($id)){
+			$id = $this->users_lib->getUserId();
+		}
+		$fields = $fieldsArr = NULL;
+		$userTbl = array('FirstName','LastName','Gender','ProfilePic');
+		foreach($post as $key => $val){
+			if(in_array($key,$userTbl))
+			$fieldsArr[] = $this->db->escape_str($key) . " = " . $this->db->escape($val);
+		}
+		if(isset($fieldsArr)){
+			$fields = implode(' , ' , $fieldsArr);
+			$sql = "UPDATE users SET " . $fields . " WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+			$query = $this->db->query($sql);
+		}
+		
+		if(isset($post['DOB'])){
+			$sql = "UPDATE personal_info SET DOB = " . $this->db->escape($post['DOB']) . " WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+			$query = $this->db->query($sql);
+		}
+	
+	}
+	
 }

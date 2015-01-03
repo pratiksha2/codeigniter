@@ -64,10 +64,14 @@ class Profile extends CI_Controller {
 	
 	public function edit($id = NULL)
 	{
-		if($this->input->is_ajax_request() && $this->input->post()){
+		if($this->input->post()){
 			$post = $this->input->post();
-			$this->editProcess($post);
-			return;
+			if( $post['form'] == 'users' ){
+				$this->editProfile($post);
+			}else{
+				$this->editProcess($post);
+				return;
+			}			
 		}
 		$this->load->model('users_model');
 		$this->load->model('profile_model');
@@ -125,6 +129,53 @@ class Profile extends CI_Controller {
 		$this->profile_model->setInfo( $post , $whichInfo , $id );
 	}
 	
+	public function editProfile($post){
+		unset($post['form']);
+		$isUploaded = NULL;
+	
+		if($this->input->post('UsersSubmit')){
+			$this->load->helper('string');
+			$config['upload_path'] = './uploads/avatars/';
+			$config['allowed_types'] = 'gif|jpeg|jpg|png';
+			$config['max_size']	= '4096';
+			$config['file_name'] = random_string('alnum', 8) . '_' . time();
+			$this->load->library('upload', $config);
+			if ( ! $this->upload->do_upload('profilePic')){
+				$error = array('error' => $this->upload->display_errors());
+				
+				if($error['error']=='<p>You did not select a file to upload.</p>'){	//	do not show if user dint uploaded profile pic
+					unset($error);
+				}
+			}else{
+				$data=$this->upload->data();
+				$isUploaded = $data['file_name'];
+			}
+		}
+		
+		$post['ProfilePic'] = $isUploaded;
+		
+		$id = NULL;
+		$isAdmin = $this->users_lib->isAdmin();
+		if($isAdmin==TRUE && isset($post['userId'])){
+			// allow admin to edit users profile
+			$id = $post['userId'];
+		}
+		unset($post['userId']);
+		$this->load->model('profile_model');
+		$this->profile_model->setBasicInfo( $post , $id );
+		
+	}
+	
+	function thumb($data){
+		$config['image_library'] = 'gd2';
+		$config['source_image'] =$data['full_path'];
+		$config['create_thumb'] = TRUE;
+		$config['maintain_ratio'] = TRUE;
+		$config['width'] = 275;
+		$config['height'] = 250;
+		$this->load->library('image_lib', $config);
+		$this->image_lib->resize();
+	}
 }
 
 /* End of file welcome.php */

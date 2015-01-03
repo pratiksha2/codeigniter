@@ -30,18 +30,18 @@
 	<div class="col-md-4">
 		<!-- Thumbnails -->
 		<div class="thumbnail">
-			<img alt="" src="<?php echo base_url();?>assets/img/defaultAvatars.png">
+			<img alt="" src="<?php echo base_url();?><?php echo get_avatar($ProfileData->ProfilePic);?>">
 			<div class="class-xs-12">
 				
 			</div>
-			<?php echo form_open('profile/edit');?>
+			<?php echo form_open_multipart('profile/edit');?>
 				<?php echo form_hidden('form', 'users');?>
 				<?php echo form_hidden('userId', $ProfileData->id);?>
 				<ul class="list-group">
 					<li class="list-group-item">
 						Change Avatar : 
 						<span class="btn btn-default btn-file">
-							Browse <input type="file">
+							Browse <input type="file" name="profilePic">
 						</span>
 					</li>
 					<li class="list-group-item">
@@ -54,14 +54,14 @@
 						Gender : 
 						<label>
 						<?php 
-							$data = array( 'name' => 'gender', 'value' => 'Male' );
+							$data = array( 'name' => 'Gender', 'value' => 'Male' );
 							if(strtolower($ProfileData->Gender) == 'male'){$data['checked'] = TRUE;}
 							echo form_radio($data);
 						?>Male
 						</label>
 						<label>
 						<?php 
-							$data = array( 'name' => 'gender', 'value' => 'Female' );
+							$data = array( 'name' => 'Gender', 'value' => 'Female' );
 							if(strtolower($ProfileData->Gender) == 'female'){$data['checked'] = TRUE;}
 							echo form_radio($data);
 						?>Female
@@ -69,7 +69,7 @@
 					</li>
 					<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
 					<li class="list-group-item">
-						Birthdate : <?php echo form_input('DOB', matrimony_date($profile['PersonalInfo']->DOB) ,'class="form-control"'); ?>
+						Birthdate : <?php echo form_input('DOB', $profile['PersonalInfo']->DOB ,'class="form-control" id="DOB-picker"'); ?>
 					</li>
 					<li class="list-group-item"><?php echo form_submit('UsersSubmit', 'Save', 'id="UsersSubmit" class="btn btn-primary btn-sm"');?></li>
 				</ul>
@@ -541,6 +541,8 @@
 	</div>
 </div>
 </div>
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap-datepicker.css">
+<script src="<?php echo base_url();?>assets/js/bootstrap-datepicker.js"></script>
 <script>
 	$(document).ready(function(){
 		$('.info-panel form').submit(function(){
@@ -584,7 +586,11 @@
             });
         });
 		
-		
+		$('#DOB-picker').datepicker({
+			format: "yyyy/mm/dd",
+			endDate: "-18y",
+			autoclose: true
+		});
 		
 	});
 </script>

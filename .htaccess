@@ -23,7 +23,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?/$1 [L]    
 
 
-RewriteCond $1 !^(index\.php|assets|pics|assets/css|assets/js|assets/img|robots\.txt)
+RewriteCond $1 !^(index\.php|assets|pics|uploads|assets/css|assets/js|assets/img|robots\.txt)
 RewriteRule ^(.*)$ /index.php/$1 [L] 
 
 </IfModule>

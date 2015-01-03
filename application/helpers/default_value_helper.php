@@ -21,3 +21,15 @@ if ( ! function_exists('set_default_blank'))
 		return $value;
 	}
 }
+
+if ( ! function_exists('get_avatar'))
+{
+	function get_avatar( $value = NULL)
+	{
+		if(empty($value) && !is_numeric($value)){
+			return 'assets/img/defaultAvatars.png';
+		}
+		$value = 'uploads/avatars/' . $value;
+		return $value;
+	}
+}
