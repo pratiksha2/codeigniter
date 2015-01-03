@@ -30,18 +30,18 @@
 	<div class="col-md-4">
 		<!-- Thumbnails -->
 		<div class="thumbnail">
-			<img alt="" src="<?php echo base_url();?>assets/img/defaultAvatars.png">
+			<img alt="" src="<?php echo base_url();?><?php echo get_avatar($ProfileData->ProfilePic);?>">
 			<div class="class-xs-12">
 				
 			</div>
-			<?php echo form_open('profile/edit');?>
+			<?php echo form_open_multipart('profile/edit');?>
 				<?php echo form_hidden('form', 'users');?>
 				<?php echo form_hidden('userId', $ProfileData->id);?>
 				<ul class="list-group">
 					<li class="list-group-item">
 						Change Avatar : 
 						<span class="btn btn-default btn-file">
-							Browse <input type="file">
+							Browse <input type="file" name="profilePic">
 						</span>
 					</li>
 					<li class="list-group-item">
@@ -54,14 +54,14 @@
 						Gender : 
 						<label>
 						<?php 
-							$data = array( 'name' => 'gender', 'value' => 'Male' );
+							$data = array( 'name' => 'Gender', 'value' => 'Male' );
 							if(strtolower($ProfileData->Gender) == 'male'){$data['checked'] = TRUE;}
 							echo form_radio($data);
 						?>Male
 						</label>
 						<label>
 						<?php 
-							$data = array( 'name' => 'gender', 'value' => 'Female' );
+							$data = array( 'name' => 'Gender', 'value' => 'Female' );
 							if(strtolower($ProfileData->Gender) == 'female'){$data['checked'] = TRUE;}
 							echo form_radio($data);
 						?>Female
@@ -69,7 +69,7 @@
 					</li>
 					<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
 					<li class="list-group-item">
-						Birthdate : <?php echo form_input('DOB', matrimony_date($profile['PersonalInfo']->DOB) ,'class="form-control"'); ?>
+						Birthdate : <?php echo form_input('DOB', $profile['PersonalInfo']->DOB ,'class="form-control" id="DOB-picker"'); ?>
 					</li>
 					<li class="list-group-item"><?php echo form_submit('UsersSubmit', 'Save', 'id="UsersSubmit" class="btn btn-primary btn-sm"');?></li>
 				</ul>
@@ -144,19 +144,19 @@
 					<div class="row">
 						<div class="col-xs-6 col-md-4">Living In : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('LivingIn', $this->formhtml_lib->getCountryList() , $profile['LocationInfo']->LivingIn ,'class="form-control"'); ?>
+							<?php echo form_dropdown('LivingIn', $this->formhtml_lib->getCountryList() , $profile['LocationInfo']->LivingIn ,'class="form-control" id="country"'); ?>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">State : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('State', $this->formhtml_lib->getStateList($profile['LocationInfo']->LivingIn) , $profile['LocationInfo']->State ,'class="form-control"'); ?>
+							<?php echo form_dropdown('State', $this->formhtml_lib->getStateList($profile['LocationInfo']->LivingIn) , $profile['LocationInfo']->State ,'class="form-control" id="state"'); ?>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-6 col-md-4">City : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
-							<?php echo form_dropdown('City', $this->formhtml_lib->getCityList($profile['LocationInfo']->State) , $profile['LocationInfo']->City ,'class="form-control"'); ?>
+							<?php echo form_dropdown('City', $this->formhtml_lib->getCityList($profile['LocationInfo']->State) , $profile['LocationInfo']->City ,'class="form-control" id="city"'); ?>
 						</div>
 					</div>
 					<div class="row">
@@ -541,6 +541,8 @@
 	</div>
 </div>
 </div>
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrap-datepicker.css">
+<script src="<?php echo base_url();?>assets/js/bootstrap-datepicker.js"></script>
 <script>
 	$(document).ready(function(){
 		$('.info-panel form').submit(function(){
@@ -554,5 +556,41 @@
 			});
 			return false;
 		});
+		
+		
+		$('#country').change(function(){
+            $.ajax({
+                url: '<?php echo base_url();?>ajax/getstates/'+$(this).val(),
+                dataType:'JSON',
+                success:function(data){
+                    $options = '<option value="">Select State</option>';
+                    for(i=0; i<data.length; i++){
+                        $options += '<option value="'+data[i].state+'">'+data[i].state+'</option>';
+                    }
+					alert($options);
+                    $('#state').html($options);
+                }
+            });
+        });
+        $('#state').change(function(){
+            $.ajax({
+                url: '<?php echo base_url();?>ajax/getcities/'+$(this).val(),
+                dataType:'JSON',
+                success:function(data){
+                    $options = '<option value="">Select City</option>';
+                    for(i=0; i<data.length; i++){
+                        $options += '<option value="'+data[i].city+'">'+data[i].city+'</option>';
+                    }
+                    $('#city').html($options);
+                }
+            });
+        });
+		
+		$('#DOB-picker').datepicker({
+			format: "yyyy/mm/dd",
+			endDate: "-18y",
+			autoclose: true
+		});
+		
 	});
 </script>

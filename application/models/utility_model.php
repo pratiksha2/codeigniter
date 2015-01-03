@@ -16,18 +16,24 @@ class Utility_model extends CI_Model {
 		return $result = $query->result();		
 	}
 	
-	public function getStates($country){
-		$this->load->database();		
-		$sql = "SELECT distinct(subdivision_name) FROM `locations`  WHERE subdivision_name !='' AND country_name = " .  $this->db->escape($country) . " ORDER BY subdivision_name;";
+	public function getStates($country = NULL) {
+		$this->load->database();
+		$sql = "SELECT distinct(subdivision_name) as state FROM `locations` WHERE subdivision_name !='' ORDER BY subdivision_name;";
+		if(isset($country)){
+			$sql = "SELECT distinct(subdivision_name) as state FROM `locations` WHERE subdivision_name !='' AND country_name = " . $this->db->escape(urldecode ( $country )) . " ORDER BY subdivision_name;";
+		}
 		$query = $this->db->query($sql);
-		return $result = $query->result();		
+		return $result = $query->result();
 	}
-	
-	public function getCities($state){
-		$this->load->database();		
-		$sql = "SELECT distinct(city_name) FROM `locations`  WHERE city_name !='' AND subdivision_name = " .  $this->db->escape($state) . " ORDER BY city_name;";
+
+	public function getCities($state = NULL) {
+		$this->load->database();
+		$sql = "SELECT distinct(city_name) as city FROM `locations` WHERE city_name !='' ORDER BY city_name;";
+		if(isset($state)){
+			$sql = "SELECT distinct(city_name) as city FROM `locations` WHERE city_name !='' AND subdivision_name = " . $this->db->escape(urldecode ( $state )) . " ORDER BY city_name;";
+		}
 		$query = $this->db->query($sql);
-		return $result = $query->result();		
+		return $result = $query->result();
 	}
 	
 	public function getLanguages(){

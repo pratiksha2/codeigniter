@@ -1,6 +1,11 @@
 <div class="container">
 		
-		 <?php echo form_open("user/newPassword");
+		 <?php echo validation_errors('<p class="alert alert-danger alert-dismissible" role="alert">
+<button class="close" data-dismiss="alert" type="button">
+<span aria-hidden="true">×</span>
+<span class="sr-only">Close</span>
+</button>');
+		 echo form_open("user/newPassword");
 				$newpassword = array('id' => 'newpassword','name' => 'newpassword','value'=>'', 'class' => 'form-control');
 				$confirmpassword = array('id' => 'confirmpassword','name' => 'confirmpassword','value'=>'', 'class' => 'form-control');
 		 ?>
@@ -9,13 +14,13 @@
 			
 				<div class="control-group">
 					<?php echo form_label('New Password:','newpassword');
-						  echo form_input($newpassword);
+						  echo form_password($newpassword);
 						  echo form_hidden('resetCode',$this->uri->segment(3))
 					?>
 				</div>
 				<div class="control-group">
 					<?php echo form_label('Confirm Password:','confirmpassword');
-						  echo form_input($confirmpassword);
+						  echo form_password($confirmpassword);
 					?>
 				</div>
 				<div class="form-actions">

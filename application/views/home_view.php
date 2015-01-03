@@ -135,7 +135,7 @@ tellus ac cursus commodo.</p>
         </div>
       </div>
 
-      <hr class="featurette-divider">
+
 
       <!-- /END THE FEATURETTES -->
 

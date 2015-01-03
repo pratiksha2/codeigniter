@@ -8,7 +8,7 @@
 				<li class="list-group-item">Gender : <?php echo $ProfileData->Gender;?></li>
 				<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
 				<li class="list-group-item">Birthdate : <?php echo matrimony_date($profile['PersonalInfo']->DOB);?></li>
-				<li class="list-group-item">Setings</li>
+				<li class="list-group-item"><button type="button" class="btn btn-primary col-xs-12" onclick="addShortList(<?php echo $ProfileData->id;?>);">Shortlist</button></li>
 			</ul>
 		</div><!-- /Thumbnails -->		
 	</div>
@@ -131,3 +131,17 @@
 	</div>
 </div>
 </div>
+<script>
+	function addShortList(id){
+		$.ajax({
+			url: '<?php echo base_url();?>shortlist/add/'+id,
+			dataType:'JSON',
+			success:function(data){
+				if(data.result){
+					$('.shortlist-id-'+id).remove();
+				}
+			}
+		});
+	}
+        
+</script>

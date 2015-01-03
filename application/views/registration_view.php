@@ -48,7 +48,11 @@ body {
 <div class="col-xs-5 drop-shadow">
 <div class="form_title">Sign Up</div>
 <div class="form_sub_title">It's free and anyone can join</div>
- <?php echo validation_errors('<p class="error">'); ?>
+ <?php echo validation_errors('<p class="alert alert-danger alert-dismissible" role="alert">
+<button class="close" data-dismiss="alert" type="button">
+<span aria-hidden="true">×</span>
+<span class="sr-only">Close</span>
+</button>'); ?>
  <?php echo form_open("user/thank"); 
 		$fname = array('id' => 'fname','name' => 'fname','value'=>'', 'class' => 'form-control');
 		$loginId = array('id' => 'loginId','name' => 'loginId','value'=>'', 'class' => 'form-control');
