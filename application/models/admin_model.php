@@ -157,5 +157,45 @@ class Admin_model extends CI_Model {
 	}
 	
 	
+    public function activateUser($id = NULL){
+        if(empty($id)){
+            return FALSE;
+        }
+        $this->load->database();
+        $sql = "UPDATE `users` u SET Activated = 1 WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+        $query = $this->db->query($sql);
+        return TRUE;
+    }
+    
+    public function deActivateUser($id = NULL){
+        if(empty($id)){
+            return FALSE;
+        }
+        $this->load->database();
+        echo $sql = "UPDATE `users` u SET Activated = 0 WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+        $query = $this->db->query($sql);
+        return TRUE;
+    }
+    
+    public function blockUser($id = NULL){
+        if(empty($id)){
+            return FALSE;
+        }
+        $this->load->database();
+        $sql = "UPDATE `users` u SET Blocked = 1 WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+        $query = $this->db->query($sql);
+        return TRUE;
+    }
+    
+    public function unBlockUser($id = NULL){
+        if(empty($id)){
+            return FALSE;
+        }
+        $this->load->database();
+        $sql = "UPDATE `users` u SET Blocked = 0 WHERE id = " . $this->db->escape($id) . " LIMIT 1";
+        $query = $this->db->query($sql);
+        return TRUE;
+    }
+    
 	
 }

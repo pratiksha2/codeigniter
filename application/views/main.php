@@ -21,7 +21,33 @@
 	.footer {
 		width: 100%;
 		background-color: #f5f5f5;
+		padding:20px;
 	}	
+	.footer .footer-about-block{
+		margin-bottom:20px;
+	}
+	.footer .footer-social img{
+		margin:0px auto;
+		width:100%;
+		max-width:64px;
+		opacity:0.8;
+		transition: opacity .25s ease-in-out;
+	   -moz-transition: opacity .25s ease-in-out;
+	   -webkit-transition: opacity .25s ease-in-out;
+	   cursor:pointer;
+	}
+	.footer .footer-social img:hover{
+		opacity:1;
+	}
+	.footer .footer-center-block , .footer .footer-copyright{
+		text-align:center;
+	}
+	.footer .footer-links > .footer-center-block{
+		margin-top:10px;
+	}
+	.footer .footer-link-header{
+		margin-bottom:5px;
+	}
 	</style>
       <?php /*----Load External CSS-----*/  ?>
    <?php if(   isset($document['externalCss']) && count($document['externalCss']) ){?>

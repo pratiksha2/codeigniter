@@ -90,6 +90,91 @@ class Ajax extends CI_Controller {
 	}
 	
 	
+    public function activate_user($id = NULL){
+        if(empty($id)){
+            return;
+        }
+        $isAdmin = $this->users_lib->isAdmin();
+        if($isAdmin!=TRUE){
+            $return = array('err' => 'You are not authorised to perform this action.');
+            echo json_encode($return);
+            return;
+        }
+        $this->load->model('admin_model');
+        $activated = $this->admin_model->activateUser($id);
+        if($activated==TRUE){
+            $return = array('success' => TRUE);
+        }else{
+            $return = array('err' => 'Unable to perform action.');
+        }
+        echo json_encode($return);
+        return;
+    }
+    
+    public function deactivate_user($id = NULL){
+        if(empty($id)){
+            return;
+        }
+        $isAdmin = $this->users_lib->isAdmin();
+        if($isAdmin!=TRUE){
+            $return = array('err' => 'You are not authorised to perform this action.');
+            echo json_encode($return);
+            return;
+        }
+        $this->load->model('admin_model');
+        $deActivated = $this->admin_model->deActivateUser($id);
+        if($deActivated==TRUE){
+            $return = array('success' => TRUE);
+        }else{
+            $return = array('err' => 'Unable to perform action.');
+        }
+        echo json_encode($return);
+        return;
+    }
+    
+    public function block_user($id = NULL){
+        if(empty($id)){
+            return;
+        }
+        $isAdmin = $this->users_lib->isAdmin();
+        if($isAdmin!=TRUE){
+            $return = array('err' => 'You are not authorised to perform this action.');
+            echo json_encode($return);
+            return;
+        }
+        $this->load->model('admin_model');
+        $blocked = $this->admin_model->blockUser($id);
+        if($blocked==TRUE){
+            $return = array('success' => TRUE);
+        }else{
+            $return = array('err' => 'Unable to perform action.');
+        }
+        echo json_encode($return);
+        return;
+    }
+    
+    public function unblock_user($id = NULL){
+        if(empty($id)){
+            return;
+        }
+        $isAdmin = $this->users_lib->isAdmin();
+        if($isAdmin!=TRUE){
+            $return = array('err' => 'You are not authorised to perform this action.');
+            echo json_encode($return);
+            return;
+        }
+        $this->load->model('admin_model');
+        $unblocked = $this->admin_model->unBlockUser($id);
+        if($unblocked==TRUE){
+            $return = array('success' => TRUE);
+        }else{
+            $return = array('err' => 'Unable to perform action.');
+        }
+        echo json_encode($return);
+        return;
+    }
+    
+	
 }
 
 /* End of file welcome.php */

@@ -10,11 +10,11 @@
 		<div class="col-xs-5 col-sm-4 col-md-3 shortlist-id-<?php echo $user->userIdMain;?>">
 			<div class="panel panel-primary">
 				<div class="panel-body">				
-					<img src="<?php echo base_url();?>assets/img/defaultAvatars.png" class="img-responsive" alt="Responsive image" />
+					<img src="<?php echo base_url();?><?php echo get_avatar($user->ProfilePic);?>" class="img-responsive" alt="Responsive image" />
 					<h4 class="center-block-custom">
 						<a href="<?php echo base_url();?>profile/<?php echo $user->userIdMain;?>"><?php echo $user->FirstName . ' ' . $user->LastName;?></a>
 					</h4>
-					<a class="btn btn-default col-xs-12" href="<?php echo base_url();?>profile/<?php echo $user->userIdMain;?>">View Profile</a>
+					<a class="btn btn-default col-xs-12" href="<?php echo base_url();?>profile/view/<?php echo $user->userIdMain;?>">View Profile</a>
 					<button type="button" class="btn btn-primary col-xs-12" onclick="removeShortList(<?php echo $user->userIdMain;?>);">Remove</button>
 				</div>					
 			</div>

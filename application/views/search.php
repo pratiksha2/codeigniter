@@ -79,7 +79,7 @@
 			<div class="col-xs-10"><?php echo form_dropdown('Education', $this->formhtml_lib->getFieldValues('Education') , '' ,'class="form-control" id="Education"'); ?></div>
 		</div>
 		<div class="row">
-			<?php echo form_submit('searchSubmit', 'Save', 'id="searchSubmit" class="btn btn-primary btn-lg col-xs-12"');?>
+			<?php echo form_submit('searchSubmit', 'Search', 'id="searchSubmit" class="btn btn-primary btn-lg col-xs-12"');?>
 		</div>
 		<?php echo form_close();?>
 	</div>

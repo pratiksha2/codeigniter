@@ -45,9 +45,12 @@ class Search extends CI_Controller {
 		}
 		$viewData['searchData'] = $searchData;
 		$this->load->model('users_model');
+		$this->load->model('profile_model');
 		$this->load->library('formhtml_lib');
 		$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
 		$data['navBarData'] = $navBarData;
+		$myShortlistIds = $this->profile_model->getShortListIds($myId);
+		$viewData['myShortlistIds'] = $myShortlistIds;
 		$data['viewData'] = $viewData;
 		$data['view']='search_result';
 		$data['document']['title']='Matrimony Site - Search Results';
@@ -62,7 +65,7 @@ class Search extends CI_Controller {
 		}
 		
 		$this->load->model('users_model');
-		
+		$this->load->model('profile_model');
 		$this->load->library('formhtml_lib');
 		$navBarData['my'] = $this->users_model->getUserBy('id',$myId);
 		$searchGender = 'Male';
@@ -78,6 +81,8 @@ class Search extends CI_Controller {
 		
 		$viewData['searchData'] = $searchData;		
 		$data['navBarData'] = $navBarData;
+		$myShortlistIds = $this->profile_model->getShortListIds($myId);
+		$viewData['myShortlistIds'] = $myShortlistIds;
 		$data['viewData'] = $viewData;
 		$data['view']='magic_search';
 		$data['document']['title']='Matrimony Site - Suggestions';

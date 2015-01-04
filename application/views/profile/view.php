@@ -3,12 +3,18 @@
 	<div class="col-md-4">
 		<!-- Thumbnails -->
 		<div class="thumbnail">
-			<img alt="" src="<?php echo base_url();?>assets/img/defaultAvatars.png">
+			<img alt="" src="<?php echo base_url();?><?php echo get_avatar($ProfileData->ProfilePic);?>">
 			<ul class="list-group">
 				<li class="list-group-item">Gender : <?php echo $ProfileData->Gender;?></li>
 				<li class="list-group-item">User From <?php echo matrimony_date($ProfileData->RegistrationDate);?></li>
 				<li class="list-group-item">Birthdate : <?php echo matrimony_date($profile['PersonalInfo']->DOB);?></li>
-				<li class="list-group-item"><button type="button" class="btn btn-primary col-xs-12" onclick="addShortList(<?php echo $ProfileData->id;?>);">Shortlist</button></li>
+				<?php if(isset($isShortListed)){?>
+					<?php if($isShortListed==FALSE){?>
+					<li class="list-group-item" id="shortList-holder"><button type="button" class="btn btn-primary center-block" onclick="addShortList(<?php echo $ProfileData->id;?>);">Shortlist</button></li>
+					<?php }else{ ?>
+					<li class="list-group-item" id="shortList-holder"><button type="button" class="btn btn-primary center-block" onclick="removeShortList(<?php echo $ProfileData->id;?>);">Remove Shortlist</button></li>
+					<?php } ?>
+				<?php } ?>
 			</ul>
 		</div><!-- /Thumbnails -->		
 	</div>
@@ -121,8 +127,13 @@
 			<div class="panel-body">
 				<?php if(count($profile['ContactInfo'])){?>
 					<?php if(!($profile['ContactInfo']->hide)){?>
+					<?php if(in_array($profile['ContactInfo']->MobilePrivacy,array(1,3))){?>
 					<div>Mobile : <?php echo set_default($profile['ContactInfo']->Mobile);?></div>
+					<?php } ?>
+					<?php if(in_array($profile['ContactInfo']->MobilePrivacy,array(2,3))){?>
 					<div>Landline : <?php echo set_default($profile['ContactInfo']->Landline);?></div>
+					<?php } ?>
+					<div>Email : <?php echo set_default($ProfileData->Email);?></div>
 					<div>Suitable Time To Call : <?php echo set_default($profile['ContactInfo']->SuitableTimeToCall);?></div>
 					<?php } ?>
 				<?php } ?>
@@ -138,7 +149,23 @@
 			dataType:'JSON',
 			success:function(data){
 				if(data.result){
-					$('.shortlist-id-'+id).remove();
+					$('#shortList-holder button').html('Remove Shortlist');
+					$('#shortList-holder button').removeAttr('onclick');
+					$('#shortList-holder button').attr('onclick',"removeShortList('"+id+"')");
+				}
+			}
+		});
+	}
+    
+	function removeShortList(id){
+		$.ajax({
+			url: '<?php echo base_url();?>shortlist/remove/'+id,
+			dataType:'JSON',
+			success:function(data){
+				if(data.result){
+					$('#shortList-holder button').html('Shortlist');
+					$('#shortList-holder button').removeAttr('onclick');
+					$('#shortList-holder button').attr('onclick',"addShortList('"+id+"')");
 				}
 			}
 		});

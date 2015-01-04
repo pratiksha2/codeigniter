@@ -80,7 +80,7 @@ class Search_model extends CI_Model {
 		$this->load->database();
 		
 		$tbls['u'] = 'users u';
-		$cols[] = 'u.id as userIdMain, u.Email, u.FirstName, u.LastName, u.Gender';
+		$cols[] = 'u.id as userIdMain, u.Email, u.FirstName, u.LastName, u.Gender, u.ProfilePic';
 		$andArr[] = "( u.Activated = '1' AND u.Blocked = '0' )";
 		
 		
