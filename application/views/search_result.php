@@ -11,13 +11,18 @@
 		<div class="panel panel-primary">
 			<div class="panel-body">
 				<div class="col-xs-5 col-sm-4 col-md-3">
-					<img src="<?php echo base_url();?>assets/img/defaultAvatars.png" class="img-responsive" alt="Responsive image" />
-					<a class="btn btn-default col-xs-12" href="<?php echo base_url();?>profile/<?php echo $search->userIdMain;?>">View Profile</a>
-					<button type="button" class="btn btn-primary col-xs-12">Shortlist</button>
+					<img src="<?php echo base_url();?><?php echo get_avatar($search->ProfilePic);?>" class="img-responsive" alt="Responsive image" />
+					<a class="btn btn-default col-xs-12" href="<?php echo base_url();?>profile/view/<?php echo $search->userIdMain;?>">View Profile</a>
+					<?php if(	!in_array($search->userIdMain , $myShortlistIds) ){?>
+						<button id="shortList-<?php echo $search->userIdMain;?>" type="button" class="btn btn-primary col-xs-12" onclick="addShortList(<?php echo $search->userIdMain;?>);">Shortlist</button>
+					<?php }else{?>
+						<button id="shortList-<?php echo $search->userIdMain;?>" type="button" class="btn btn-primary col-xs-12" onclick="removeShortList(<?php echo $search->userIdMain;?>);">Remove Shortlist</button>
+					<?php } ?>
+					
 				</div>
 				<div class="col-xs-7 col-sm-8 col-md-9">
 					<h4>
-						<a href="<?php echo base_url();?>profile/<?php echo $search->userIdMain;?>"><?php echo $search->FirstName . ' ' . $search->LastName;?></a>
+						<a href="<?php echo base_url();?>profile/view/<?php echo $search->userIdMain;?>"><?php echo $search->FirstName . ' ' . $search->LastName;?></a>
 					</h4>
 					<?php if( isset($search->AboutMe) && $search->AboutMe!='' ){ ?>
 						<div><span class="searchLabel">About Me : </span><?php echo $search->AboutMe;?></div>
@@ -78,3 +83,35 @@
 		<div class="row center">No Result Found</div>
 	<?php } ?>
 </div>
+
+
+<script>
+	function addShortList(id){
+		$.ajax({
+			url: '<?php echo base_url();?>shortlist/add/'+id,
+			dataType:'JSON',
+			success:function(data){
+				if(data.result){
+					$('#shortList-'+id).html('Remove Shortlist');
+					$('#shortList-'+id).removeAttr('onclick');
+					$('#shortList-'+id).attr('onclick',"removeShortList('"+id+"')");
+				}
+			}
+		});
+	}
+    
+	function removeShortList(id){
+		$.ajax({
+			url: '<?php echo base_url();?>shortlist/remove/'+id,
+			dataType:'JSON',
+			success:function(data){
+				if(data.result){
+					$('#shortList-'+id).html('Shortlist');
+					$('#shortList-'+id).removeAttr('onclick');
+					$('#shortList-'+id).attr('onclick',"addShortList('"+id+"')");
+				}
+			}
+		});
+	}
+        
+</script>

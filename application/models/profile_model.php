@@ -65,6 +65,18 @@ class Profile_model extends CI_Model {
 		$PartnerSeekingInfo = $query->first_row();
 		return $PartnerSeekingInfo;
 	}
+	
+	public function getShortListIds($id){
+		$this->load->database();		
+		$sql = "SELECT IntrestedUserId FROM profile_shortlist WHERE UserID = " . $this->db->escape($id) . "";
+		$query = $this->db->query($sql);
+		$shortListIds = $query->result();
+		$shortListIdsArr = array();
+		foreach($shortListIds as $id){
+			$shortListIdsArr[] = $id->IntrestedUserId;
+		}
+		return $shortListIdsArr;
+	}
 		
 		
 	public function setInfo( $post , $whichInfo , $id = NULL ){

@@ -44,6 +44,15 @@ class Profile extends CI_Controller {
 		$myId = $this->users_lib->getUserId();
 		$viewData['my'] = $navBarData['my'] = $this->users_model->getUserBy('id',$myId);
 		$data['navBarData'] = $navBarData;
+		$isShortListed = NULL;
+		if($myId != $id){
+			$isShortListed = FALSE;
+			$myShortlistIds = $this->profile_model->getShortListIds($myId);
+			if(	in_array($id , $myShortlistIds) ){
+				$isShortListed = TRUE;
+			}
+		}
+		$viewData['isShortListed'] = $isShortListed;
 		$data['viewData'] = $viewData;
 		$data['view']='profile/view';
 		$data['document']['title']='Matrimony Site - Profile : ' . $viewData['ProfileData']->FirstName . ' ' . $viewData['ProfileData']->LastName;

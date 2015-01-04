@@ -14,29 +14,25 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Link</a></li>
+			<li><a href="<?php echo base_url();?>">Home</a></li>
+            <li><a href="<?php echo base_url();?>search/suggestions">Suggestions</a></li>
+			<li><a href="<?php echo base_url();?>search">Search</a></li>
+			<?php if(isset($my)){?>
+			<li><a href="<?php echo base_url();?>profile"><?php echo $my->FirstName;?></a></li>
+			<li><a href="<?php echo base_url();?>shortlist">My Shortlist</a></li>
+			<?php } ?>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help<span class="caret"></span></a>
                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
+                  <li><a href="<?php echo base_url();?>user/contactus">Contact Us</a></li>
+                  <li><a href="<?php echo base_url();?>user/terms">Terms & Conditions</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">Separated link</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">One more separated link</a></li>
+                  <li><a href="<?php echo base_url();?>user/faqs">FAQs</a></li>
+                  <li><a href="<?php echo base_url();?>user/aboutus">About Us</a></li>                  
                </ul>
             </li>
-         </ul>
-         <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-               <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-         </form>
-         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Link</a></li>
             <?php if(isset($my)){?>
 			<li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Profile<span class="caret"></span></a>

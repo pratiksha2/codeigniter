@@ -15,7 +15,7 @@
 |
 */
 //$config['base_url']	= 'http://localhost/codeigniter/';
-$config['base_url']	= 'http://183.87.8.93/codeigniter/';
+$config['base_url']	= 'http://183.87.8.94/codeigniter/';
 
 /*
 |--------------------------------------------------------------------------

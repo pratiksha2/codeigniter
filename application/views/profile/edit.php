@@ -468,6 +468,20 @@
 						</div>
 					</div>
 					<div class="row">
+						<div class="col-xs-6 col-md-4">Contact Privacy : </div>
+						<?php 
+							$contactPrivacy = array(
+														'Hide Everything',
+														'Show Mobile',
+														'Show Landline',
+														'Show Everything',
+													);
+						?>
+						<div class="col-xs-12 col-sm-6 col-md-8">
+							<?php echo form_dropdown('MobilePrivacy', $contactPrivacy , $profile['ContactInfo']->MobilePrivacy ,'class="form-control"'); ?>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col-xs-6 col-md-4">Suitable Time To Call : </div>
 						<div class="col-xs-12 col-sm-6 col-md-8">
 							<?php echo form_dropdown('SuitableTimeToCall', $this->formhtml_lib->getFieldValues('SuitableTimeToCall') , $profile['ContactInfo']->SuitableTimeToCall ,'class="form-control"'); ?>
